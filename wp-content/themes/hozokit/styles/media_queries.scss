@@ -1,0 +1,67 @@
+/*
+A set of mixings to aid the use of media queries.
+Enmanuel Durán's approach as seen at:
+https://dev.to/duranenmanuel/another-approach-to-media-queries-with-the-power-of-sass-3ghf
+*/
+
+$devices: (
+    phone: 740px,
+    tablet: 950px,
+    laptop: 1366px,
+    desktop: 1440px,
+    large-desktop: 2100px
+);
+
+
+/* Apply to devices with a higher screen than a phone */
+@mixin min-device($device: map-get($devices, 'phone')) {
+    @if map-has-key($devices, $device) {
+        @media screen and (min-width: map-get($devices, $device)) {
+            @content;
+        }
+    }
+}
+
+/* Apply to devices with screen sizes smaller than a phone */
+@mixin max-device($device: map-get($devices, 'phone')) {
+    @if map-has-key($devices, $device) {
+        @media screen and (max-width: map-get($devices, $device) - 1) {
+            @content;
+        }
+    }
+}
+
+/* Apply to only phone devices */
+@mixin only-device($device: map-get($devices, 'phone')) {
+    @if map-has-key($devices, $device) {
+        $devices-length: length($devices);
+        $map-list: map-keys($devices);
+
+        @if index($map-list, $device) == $devices-length {
+            @include min-device($device) {
+                @content;
+            }
+        } @else {
+            $next-device-index: index($map-list, $device) + 1;
+            $next-device-key: nth($map-list, $next-device-index);
+
+            @media screen and (min-width: map-get($devices, $device)) and (max-width: map-get($devices, $next-device-key) - 1) {
+                @content;
+            }
+        }
+    }
+}
+
+/* Apply to devices in a range, in this case, between a phone and a tablet */
+@mixin between-devices(
+    $min-device: map-get($devices, 'phone'),
+    $max-device: map-get($devices, 'tablet')
+) {
+    @if map-has-key($devices, $min-device) and
+        map-has-key($devices, $max-device)
+    {
+        @media screen and (min-width: map-get($devices, $min-device)) and (max-width: map-get($devices, $max-device) - 1) {
+            @content;
+        }
+    }
+}

@@ -1,0 +1,15 @@
+html {
+  font-size: 10px;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+}
+
+@include post-heading-defaults;
+
+p, a, ol, li {
+  font-family: $primary-font;
+  font-size: 1.6rem;
+}

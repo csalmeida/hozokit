@@ -1,0 +1,26 @@
+$primary-font: 'Karla', sans-serif;
+$secondary-font: 'Offside', sans-serif;
+
+@include font(
+  'Offside',
+  $offside-path+'Offside-Regular.ttf'
+);
+
+@include font(
+  'Karla',
+  $karla-path+'Karla-Regular.ttf'
+);
+
+@include font(
+  'Karla',
+  $karla-path+'Karla-Italic.ttf',
+  400,
+  italic
+);
+
+@include font(
+  'Karla',
+  $karla-path+'Karla-Bold.ttf',
+  700,
+  bold
+);
