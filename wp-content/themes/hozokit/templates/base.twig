@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  {% block head %}
+    {% include 'head.twig' %}
+  {% endblock %}
+
+  <body>
+    {% block header %}
+      {% include 'header/index.twig' %}
+    {% endblock %}
+
+    <main class="main">
+      {% block content %}
+        <h1>Content blocks are rendered here.</h1>
+      {% endblock %}
+    </main>
+
+    {% block footer %}
+      {% include 'footer/index.twig' %}
+    {% endblock %}
+  </body>
+</html>

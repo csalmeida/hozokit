@@ -1,0 +1,16 @@
+{% block head %}
+  <head>
+      <meta charset="{{ site.charset }}">
+      <meta name="description" content="Component developmennt focused Wordpress theme template.">
+      <meta name="keywords" content="Hozokit, Wordpress.">
+      <meta name="author" content="Cristiano Almeida">
+      <link rel="icon" href="{{ site.icon ? site.icon : theme.link ~ '/assets/favicon.ico' }}">
+      <title>{{ site.name }}</title>
+
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      
+      {# Adds enqueued styles and scripts. #}
+      {{ function('wp_head') }}
+  </head>
+{% endblock %}

@@ -1,0 +1,15 @@
+{% block header %}
+  {# Header includes logo and navigation #}
+  <header class="header">
+    <h2 id="site-name"><a href="{{ site.url }}">{{ site.name }}</a></h2>
+    <nav>
+      <ul>
+        {% for item in menus.primary.items %}
+          <li>
+            <a href="{{ item.link }}">{{ item.title }}</a>
+          </li>
+        {% endfor %}
+      </ul>
+    </nav>
+  </header>
+{% endblock %}

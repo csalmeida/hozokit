@@ -1,0 +1,23 @@
+{% block footer %}
+<footer class="footer">
+  <section>
+    {% for menu in menus %}
+    <nav class="footer-navigation">
+      <h5>{{ menu.name }}</h5>
+      <ul>
+        {% for item in menu.items %}
+          <li>
+            <a href="{{ item.link }}">{{ item.title }}</a>
+          </li>
+        {% endfor %}
+      </ul>
+    </nav>
+    {% endfor %}
+  </section>
+
+  {% set date = "now"|date('Y') %}
+  <p>Developed with <a href="https://github.com/csalmeida/hozokit">Hozokit</a> <time datetime="{{ date }}">{{ date }}.</time><p>
+</footer>
+{# Adds enqueued styles and scripts. #}
+{{ function('wp_footer') }}
+{% endblock %}
