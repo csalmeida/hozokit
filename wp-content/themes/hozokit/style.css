@@ -1,0 +1,12 @@
+@charset "UTF-8";/*!
+Theme Name: hozokit
+Theme URI: https://github.com/csalmeida/hozokit
+Author: Cristiano Almeida
+Author URI: http://www.csalmeida.com
+Description: Component developmennt focused Wordpress theme template.
+Version: 1.0
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Tags: custom, hozokit, csalmeida
+Text Domain: hozokit
+*/@font-face{font-family:Offside;src:url(assets/fonts/offside/Offside-Regular.ttf) format("truetype");font-style:normal;font-weight:400}@font-face{font-family:Karla;src:url(assets/fonts/karla/Karla-Regular.ttf) format("truetype");font-style:normal;font-weight:400}@font-face{font-family:Karla;src:url(assets/fonts/karla/Karla-Italic.ttf) format("truetype");font-style:italic;font-weight:400}@font-face{font-family:Karla;src:url(assets/fonts/karla/Karla-Bold.ttf) format("truetype");font-style:bold;font-weight:700}html{font-size:10px}body,html{width:100%;height:100%}h1,h2,h3,h4,h5,h6{text-transform:none;font-family:Offside,sans-serif;font-size:2.6rem;color:#0d0d0d;margin:3rem 0}h3{font-size:2.4rem}h3{font-size:2.2rem}h4{font-size:2rem}h5{font-size:1.8rem}h6{font-size:1.6rem}a,li,ol,p{font-family:Karla,sans-serif;font-size:1.6rem}.example h1{font-family:Karla,sans-serif}.example p{font-family:Offside,sans-serif}.footer{font-family:Karla,sans-serif}.header h2 a{font-family:Offside,sans-serif;font-size:2rem}
