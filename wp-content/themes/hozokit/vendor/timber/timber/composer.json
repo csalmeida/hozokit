@@ -1,0 +1,57 @@
+{
+  "name": "timber/timber",
+  "type": "library",
+  "description": "Plugin to write WordPress themes w Object-Oriented Code and the Twig Template Engine",
+  "keywords": [
+    "timber",
+    "twig",
+    "themes",
+    "templating"
+  ],
+  "homepage": "http://timber.upstatement.com",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Jared Novack",
+      "email": "jared@upstatement.com",
+      "homepage": "http://upstatement.com"
+    },
+    {
+      "name": "Connor J. Burton",
+      "email" : "connorjburton@gmail.com",
+      "homepage": "http://connorburton.com"
+    }
+  ],
+  "support": {
+    "issues": "https://github.com/timber/timber/issues",
+    "source": "https://github.com/timber/timber",
+    "docs": "https://timber.github.io/docs/"
+  },
+  "require": {
+    "php": ">=5.3.0|7.*",
+    "twig/twig": "1.34.*|2.*",
+    "upstatement/routes": "0.4",
+    "composer/installers": "~1.0",
+    "asm89/twig-cache-extension": "~1.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "5.7.16",
+    "wpackagist-plugin/advanced-custom-fields": "4.4.*",
+    "wpackagist-plugin/co-authors-plus" : "3.2.*",
+    "johnpbloch/wordpress" : "4.*"
+  },
+  "suggest" : {
+    "satooshi/php-coveralls": "1.0.* for code coverage"
+  },
+  "autoload": {
+    "psr-4": {
+      "Timber\\": "lib/"
+    }
+  },
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://wpackagist.org"
+    }
+  ]
+}
