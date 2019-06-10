@@ -1,4 +1,4 @@
-![Hozokit logo.](wp-content/themes/hozokit/assets/images/hozokit_logo.svg)
+![Hozokit logo.](wp-content/themes/hozokit/screenshot.png)
 
 # Hozokit Template for Wordpress
 > A template that aims to streamline component based development in [Wordpress](https://wordpress.org/) using [Timber](https://www.upstatement.com/timber/).
