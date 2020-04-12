@@ -1,1 +1,0 @@
-"use strict";console.info("Hozokit v1.00");

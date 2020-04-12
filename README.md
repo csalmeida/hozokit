@@ -24,17 +24,22 @@ Create a database and either add the details to a `wp-config.php` file or setup 
 > A webserver with php and mysql installed is required in order to follow these steps.
 
 Navigate to the theme directory and download dependencies (requires `Node`):
-```
+
+```bash
 cd wp-content/themes/hozokit
 npm install
 ```
 
 When changing scripts and styling run the following commands (might require `gulp-cli` installed globally):
-```
+
+```bash
+npm start
+# or
 npm run watch
 ```
 In order to build without watching for changes:
-```
+
+```bash
 npm run build
 ```
 > See `gulpfile.js` for all tasks.
@@ -64,7 +69,9 @@ When styling components it is important that they have their own [`class`](https
 When styling components make sure to run `npm run watch` from the terminal in order to update styles. There is no hot reloading so you still need to refresh the page in order to see the results.
 
 ## Creating scripts
-Scripts should be imported into `/scripts/index.js`, ECMAScript 2015+ (ES6) is supported as similar to the styling, [scripts are being transpiled](https://babeljs.io/) and then bundled into a single file at `assets/scripts/main.js`.
+Scripts should be imported into `/scripts/index.js`, ECMAScript 2015+ (ES6) is supported as similar to the styling, [scripts are being transpiled](https://babeljs.io/) and then bundled into a single file at `assets/scripts/bundle.js`.
+
+Scripts can be splited into multiple files and imported as needed.
 
 ### Supporting and maintaining the project
 Please feel free to ask any questions, add suggestions or point out bugs by creating an issue. Pull requests are welcome as well! Thank you 🙇🏻

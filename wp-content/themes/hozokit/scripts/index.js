@@ -1,1 +1,1 @@
-console.info('Hozokit v1.00')
+console.info('Hozokit')
