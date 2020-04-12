@@ -12,11 +12,11 @@ $example_block = array(
   'name'            => 'example-block',
   'key'				      => 'example-block',
   'title'           => __('Example'),
-  'description'     => __("Renders button with given url and text."),
+  'description'     => __("Renders an example block with text."),
   'render_callback' => $render_callback,
   'category'        => 'hozokit',
   'icon'            => 'admin-comments',
-  'keywords'        => array( 'button', 'content' ),
+  'keywords'        => array( 'example', 'content' ),
 );
 
 /** 
