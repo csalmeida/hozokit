@@ -5,6 +5,9 @@ wp-content/themes/index.php
 wp-content/plugins/index.php
 wp-content/index.php
 
+### Wordpress Plugins ###
+wp-content/plugins
+
 ### Advanced Custom Fields ###
 wp-content/plugins/advanced-custom-fields
 wp-content/plugins/advanced-custom-fields-pro
