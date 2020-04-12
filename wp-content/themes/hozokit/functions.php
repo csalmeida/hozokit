@@ -10,9 +10,10 @@
     // Insert styles and scripts to be used in the theme.
     // The stylesheet is compiled from SASS files in /styles, scripts from /scripts using Gulp.
     function loadStylesAndScripts() {
+        $theme_version = wp_get_theme()['Version'];
         wp_enqueue_style( 'normalize', get_template_directory_uri() . '/assets/css/normalize.css' );
         wp_enqueue_style( 'style', get_stylesheet_uri() );
-        wp_register_script( 'script', get_template_directory_uri() . '/assets/scripts/main.js', "", '1.0', true );
+        wp_register_script( 'script', get_template_directory_uri() . '/assets/scripts/bundle.js', "", $theme_version, true );
         wp_enqueue_script('script');
         $translation_array = array( 'templateUrl' => get_template_directory_uri() );
         //after wp_enqueue_script
