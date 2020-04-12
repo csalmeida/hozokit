@@ -4,6 +4,7 @@
   "description": "Wordpress theme template.",
   "main": "index.js",
   "scripts": {
+    "start": "npm run watch",
     "watch": "gulp watch",
     "build": "gulp build"
   },
