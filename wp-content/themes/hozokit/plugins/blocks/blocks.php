@@ -3,21 +3,15 @@ defined( 'ABSPATH' ) or die( 'This file cannot be accessed directly.' );
 
 $render_callback = 'hozokit_block_render';
 
-$tagline = array(
-  'name'            => 'tagline-block',
-  'key'				      => 'tagline-block',
-  'title'           => __('Tagline'),
-  'description'     => __("Site's tagline."),
-  'render_callback' => $render_callback,
-  'category'        => 'hozokit',
-  'icon'            => 'admin-comments',
-  'keywords'        => array( 'tagline', 'content' ),
-);
-
-$button = array(
-  'name'            => 'button-block',
-  'key'				      => 'button-block',
-  'title'           => __('Button'),
+/**
+ * This is the definition of an example block with the parameters it needs.
+ * Feel free to use this as a template for your first block.
+ * The block will only show in Gutenberg if added in ACF.
+ */
+$example_block = array(
+  'name'            => 'example-block',
+  'key'				      => 'example-block',
+  'title'           => __('Example'),
   'description'     => __("Renders button with given url and text."),
   'render_callback' => $render_callback,
   'category'        => 'hozokit',
@@ -25,7 +19,10 @@ $button = array(
   'keywords'        => array( 'button', 'content' ),
 );
 
+/** 
+ * All blocks need to be added to this array.
+ * These will then be registered in ACF and will display in Gutenberg once a field is created that requires the block.
+ */
 $blocks = array(
-  $tagline,
-  $button
+  $example_block,
 );
