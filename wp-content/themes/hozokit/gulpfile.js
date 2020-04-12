@@ -1,25 +1,36 @@
 const gulp = require('gulp')
-const babel = require('gulp-babel')
 const concat = require('gulp-concat')
-const uglify = require('gulp-uglify')
 const sass = require('gulp-sass')
 const cleanCSS = require('gulp-clean-css')
 const rename = require('gulp-rename')
 const clean = require('gulp-clean')
+const rollup = require('rollup')
+const rollupTerser = require('rollup-plugin-terser')
+const rollupResolve = require('@rollup/plugin-node-resolve')
+const rollupBabel = require('rollup-plugin-babel')
 
 /*
-  Transpiles JavaScript files,
-  concatenates as needed, (this might not be necessary)
-  minifies and exports them.
+  Transpiles JavaScript files using Rollup.
 */
 gulp.task('scripts', () => {
-  return gulp.src("./scripts/index.js")
-      .pipe(babel({
-        presets: ['@babel/env']
-      }))
-     .pipe(concat('main.js'))
-     .pipe(uglify())
-     .pipe(gulp.dest('./assets/scripts'))
+  return rollup.rollup({
+    input: './scripts/index.js',
+    plugins: [
+      rollupResolve(),
+      rollupBabel({
+        exclude: 'node_modules/**' // only transpile our source code
+      }),
+    ]
+  }).then(bundle => {
+    return bundle.write({
+      file: './assets/scripts/bundle.js',
+      format: 'cjs',
+      name: 'version',
+      plugins: [
+        rollupTerser.terser(),
+      ],
+    })
+  })
 })
 
 /*
