@@ -1,5 +1,7 @@
 {% block preview %}
-  <section>
-    <p>This is an example preview of a block.</p>
-  </section>
+  {% if is_preview %}
+    <section>
+      <p>This is an example preview of a block.</p>
+    </section>
+  {% endif %}
 {% endblock %}
