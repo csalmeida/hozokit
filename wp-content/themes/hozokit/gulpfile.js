@@ -126,7 +126,11 @@ gulp.task('watch', () => {
   if (browserSyncProxy != null && typeof(browserSyncProxy) != 'undefined') {
     // Initiates Browser Sync to allow hot reloading when watching files.
     browserSync.init({
-      proxy: browserSyncProxy
+      proxy: browserSyncProxy,
+      port: 2077,
+      ui: {
+        port: 2020
+      }
     })
 
     gulp.watch('scripts/*.js', gulp.series('scripts'))
