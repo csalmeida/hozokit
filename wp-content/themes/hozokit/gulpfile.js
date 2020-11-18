@@ -17,7 +17,7 @@ const browserSync = require('browser-sync').create();
 */
 
 // Change this to where your webserver points to.
-const browserSyncProxy = 'localhost:3000'
+const browserSyncProxy = null
 // Used to reload browser when changes are made.
 const hotReload = browserSync.reload
 
@@ -123,19 +123,29 @@ gulp.task('block-styles', () => {
 
 /* Registers changes in scrips and sass files. */
 gulp.task('watch', () => {
-  // Initiates Browser Sync to allow hot reloading when watching files.
-  browserSync.init({
-    proxy: "hozokit.test"
-  })
+  if (browserSyncProxy != null && typeof(browserSyncProxy) != 'undefined') {
+    // Initiates Browser Sync to allow hot reloading when watching files.
+    browserSync.init({
+      proxy: browserSyncProxy
+    })
 
-  gulp.watch('scripts/*.js', gulp.series('scripts'))
-  .on("change", hotReload)
-  
-  gulp.watch(stylesheetWatchPaths, gulp.series(['styles', 'block-styles']))
-  .on("change", hotReload)
+    gulp.watch('scripts/*.js', gulp.series('scripts'))
+    .on("change", hotReload)
+    
+    gulp.watch(stylesheetWatchPaths, gulp.series(['styles', 'block-styles']))
+    .on("change", hotReload)
 
-  gulp.watch(markupWatchPaths)
-  .on("change", hotReload)
+    gulp.watch(markupWatchPaths)
+    .on("change", hotReload)
+  } else {
+    // Informs that hot reloading is not available.
+    console.info('\n🛑 Hot reloading is not available. Add the address of your server to browserSyncProxy in gulpfile.js')
+    console.info('Find examples of proxies at: https://www.browsersync.io/docs/options/#option-proxy')
+    console.info('Files will still be watched and compiled.\n')
+
+    gulp.watch('scripts/*.js', gulp.series('scripts'))
+    gulp.watch(stylesheetWatchPaths, gulp.series(['styles', 'block-styles']))
+  }
 })
 
 /* Compiles all files. */
