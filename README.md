@@ -30,7 +30,7 @@ Given that `nvm` is installed:
 
 ```bash
 # Please check the included .nvmrc to get the correct version number.
-nvm install 13.0.1
+nvm install 14.15.1
 
 # Will make use of .nvmrc to set the version.
 # There might be a prompt to install the requested Node version if it's not present already.
@@ -51,7 +51,7 @@ If you're a WSL2 user, these are the steps we took to solve the issue temporaril
 1. [Install nvm for Windows](https://github.com/coreybutler/nvm-windows)
 1. Open a Powershell window as an Administrator
 1. On the Powershell, navigate to the theme directory. e.g wp-content/themes/hozokit
-1. Run nvm use 13.0.1 (in this case .nvmrc seems to be ignored so it needs to be specific)
+1. Run nvm use 14.15.1 (in this case .nvmrc seems to be ignored so it needs to be specific)
 1. npm install (if not already done)
 1. npm start (to watch changes)
 
