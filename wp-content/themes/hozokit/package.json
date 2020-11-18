@@ -1,6 +1,6 @@
 {
   "name": "hozokit",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Wordpress theme template.",
   "main": "index.js",
   "scripts": {
@@ -37,5 +37,6 @@
     "rollup": "^1.32.0",
     "rollup-plugin-babel": "^4.3.3",
     "rollup-plugin-terser": "^5.2.0"
-  }
+  },
+  "dependencies": {}
 }
