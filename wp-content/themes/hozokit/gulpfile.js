@@ -8,6 +8,26 @@ const rollup = require('rollup')
 const rollupTerser = require('rollup-plugin-terser')
 const rollupResolve = require('@rollup/plugin-node-resolve')
 const rollupBabel = require('rollup-plugin-babel')
+const browserSync = require('browser-sync').create();
+
+
+/*
+  Enables Hot Reloading
+  Needs to be configured to the server being used. example hozokit.test or localhost:3000
+*/
+
+// Change this to where your webserver points to.
+const browserSyncProxy = 'localhost:3000'
+// Used to reload browser when changes are made.
+const hotReload = browserSync.reload
+
+/*
+  Tasked with reloading the browser window everytime there are changes.
+*/
+gulp.task('hot-reload', function (done) {
+  browserSync.reload();
+  done();
+});
 
 /*
   Transpiles JavaScript files using Rollup.
@@ -65,6 +85,16 @@ const stylesheetWatchPaths = [
   '!styles/temp.scss'
 ]
 
+/* 
+ * Watches changes in .twig and php files.
+ * php is included because it could include markup
+ * or reason to reload in some edge cases. 
+*/
+const markupWatchPaths = [
+  'templates/**/*.twig',
+  '**/*.php',
+]
+
 /* Compiles a style.css for the front facing side of the site. */
 gulp.task('styles', () => {
   return gulp.src(stylesheetCompilePaths)
@@ -93,9 +123,23 @@ gulp.task('block-styles', () => {
 
 /* Registers changes in scrips and sass files. */
 gulp.task('watch', () => {
-  gulp.watch('scripts/*.js', gulp.series('scripts'));
-  gulp.watch(stylesheetWatchPaths, gulp.series(['styles', 'block-styles']));
+  // Initiates Browser Sync to allow hot reloading when watching files.
+  browserSync.init({
+    proxy: "hozokit.test"
+  })
+
+  gulp.watch('scripts/*.js', gulp.series('scripts'))
+  .on("change", hotReload)
+  
+  gulp.watch(stylesheetWatchPaths, gulp.series(['styles', 'block-styles']))
+  .on("change", hotReload)
+
+  gulp.watch(markupWatchPaths)
+  .on("change", hotReload)
 })
 
 /* Compiles all files. */
 gulp.task('build', gulp.series(['scripts', 'styles', 'block-styles']))
+
+/* The default task builds styles and scripts before watching. */
+gulp.task('default', gulp.series(['build', 'watch']))
