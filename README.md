@@ -15,6 +15,13 @@ This is not a library but rather an initial setup to jumpstart the development o
 
 - [Creating Custom Blocks](/docs/blocks.md)
 
+## Requirements
+
+- Wordpress `5.0`
+- MySQL `8.0.19`
+- PHP `7.2.32`
+- Node `14.15.1`
+
 ## Setup
 
 Download Wordpress and copy the template folder to `wp-content/themes` folder.
