@@ -14,6 +14,7 @@ This is not a library but rather an initial setup to jumpstart the development o
 ## Documentation
 
 - [Creating Custom Blocks](/docs/blocks.md)
+- [Enabling Hot Reload](/docs/hot_reload.md)
 
 ## Requirements
 
@@ -87,6 +88,7 @@ npm run build
 ```
 > See `gulpfile.js` for all tasks.
 
+[Hot Reloading can be enabled](/docs/hot_reload.md) once the steps above have been followed.
 
 # Customizing the theme
 
