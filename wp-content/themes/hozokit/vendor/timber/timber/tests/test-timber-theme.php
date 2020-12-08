@@ -5,12 +5,12 @@
 		protected $backup_wp_theme_directories;
 
 		function testThemeVersion() {
-			switch_theme('twentysixteen');
+			switch_theme('twentyseventeen');
 			$theme = new TimberTheme();
 			$this->assertGreaterThan(1.2, $theme->version);
 			switch_theme('default');
 		}
-		
+
 		function testThemeMods(){
 			set_theme_mod('foo', 'bar');
 			$theme = new TimberTheme();
@@ -21,7 +21,7 @@
 		}
 
 		function testPath() {
-			$context = Timber::get_context();
+			$context = Timber::context();
 			$theme = $context['site']->theme;
 			$output = Timber::compile_string('{{site.theme.path}}', $context);
 			$this->assertEquals('/wp-content/themes/'.$theme->slug, $output);
@@ -50,14 +50,14 @@
 
 		function testPathOnSubdirectoryInstall() {
 			update_option( 'siteurl', 'http://example.org/wordpress', true );
-			$context = Timber::get_context();
+			$context = Timber::context();
 			$theme = $context['site']->theme;
 			$output = Timber::compile_string('{{site.theme.path}}', $context);
 			$this->assertEquals('/wp-content/themes/'.$theme->slug, $output);
 		}
 
 		function testLink() {
-			$context = Timber::get_context();
+			$context = Timber::context();
 			$theme = $context['site']->theme;
 			$output = Timber::compile_string('{{site.theme.link}}', $context);
 			$this->assertEquals('http://example.org/wp-content/themes/'.$theme->slug, $output);
@@ -65,10 +65,26 @@
 
 		function testLinkOnSubdirectoryInstall() {
 			update_option( 'siteurl', 'http://example.org/wordpress', true );
-			$context = Timber::get_context();
+			$context = Timber::context();
 			$theme = $context['site']->theme;
 			$output = Timber::compile_string('{{site.theme.link}}', $context);
 			$this->assertEquals('http://example.org/wp-content/themes/'.$theme->slug, $output);
+		}
+
+		function testThemeGet() {
+			switch_theme('twentyseventeen');
+			$context = Timber::context();
+			$output = Timber::compile_string('{{site.theme.get("Name")}}', $context);
+			$this->assertEquals('Twenty Seventeen', $output);
+			switch_theme('default');
+		}
+
+		function testThemeDisplay() {
+			switch_theme('twentyseventeen');
+			$context = Timber::context();
+			$output = Timber::compile_string('{{site.theme.display("Description")}}', $context);
+			$this->assertEquals("Twenty Seventeen brings your site to life with header video and immersive featured images. With a focus on business sites, it features multiple sections on the front page as well as widgets, navigation and social menus, a logo, and more. Personalize its asymmetrical grid with a custom color scheme and showcase your multimedia content with post formats. Our default theme for 2017 works great in many languages, for any abilities, and on any device.", $output);
+			switch_theme('default');
 		}
 
 		function setUp() {
@@ -87,7 +103,7 @@
 		function tearDown() {
 			global $wp_theme_directories;
 
-			$wp_theme_directories = $this->backup_wp_theme_directories;	
+			$wp_theme_directories = $this->backup_wp_theme_directories;
 
 			wp_clean_themes_cache();
 			unset( $GLOBALS['wp_themes'] );
