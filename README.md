@@ -25,7 +25,7 @@ This is not a library but rather an initial setup to jumpstart the development o
 
 ## Setup
 
-Download Wordpress and copy the template folder to `wp-content/themes` folder.
+Download [Wordpress](https://wordpress.org/download/) and copy the template folder to `wp-content/themes` folder.
 Rename the template folder to match your chosen theme name.
 
 Create a database and either add the details to a `wp-config.php` file or setup using the Wordpress onboarding.
