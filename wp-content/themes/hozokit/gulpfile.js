@@ -1,23 +1,56 @@
-const gulp = require('gulp')
-const concat = require('gulp-concat')
-const sass = require('gulp-sass')
-const cleanCSS = require('gulp-clean-css')
-const rename = require('gulp-rename')
-const clean = require('gulp-clean')
-const rollup = require('rollup')
-const rollupTerser = require('rollup-plugin-terser')
-const rollupResolve = require('@rollup/plugin-node-resolve')
-const rollupBabel = require('rollup-plugin-babel')
+// Used to create tasks.
+const gulp = require('gulp');
+
+// Used in compiling SCSS to CSS.
+const sass = require('gulp-sass');
+const clean = require('gulp-clean');
+const cleanCSS = require('gulp-clean-css');
+const rename = require('gulp-rename');
+const concat = require('gulp-concat');
+
+// Used in bundling JavaScript.
+const rollup = require('rollup');
+const rollupTerser = require('rollup-plugin-terser');
+const rollupResolve = require('@rollup/plugin-node-resolve');
+const rollupBabel = require('rollup-plugin-babel');
+
+// Manages environment variables.
+const dotenv = require('dotenv');
+const gulpif = require('gulp-if');
+// Used to enable hot reloading.
 const browserSync = require('browser-sync').create();
 
+// Initializes environment variables.
+// Will look available variables in .env file.
+dotenv.config()
+
+// Retrieving environment from env file.
+const environment = process.env.APP_ENVIRONMENT
+const envIsNotDevelopment = environment != "development" && environment != undefined
+if (environment === undefined) console.info('🛑 Environment is not specified in .env, add APP_ENVIRONMENT to enable development features.\n')
+
+// Used in cases where minify if needed in development environments.
+// For instance, the staging version of the site.
+// Pass to command as an argument. e.g npm run watch --minify
+const minifyEnabled = process.argv.includes('--minify')
+
+// Scripts won't minify on development environments.
+let rollupPlugins = []
+if (envIsNotDevelopment || minifyEnabled) {
+  rollupPlugins.push(rollupTerser.terser())
+}
 
 /*
   Enables Hot Reloading
-  Needs to be configured to the server being used. example hozokit.test or localhost:3000
+  Needs to be configured to the server being used in your .env file. example hozokit.test or localhost:3000
 */
 
-// Change this to where your webserver points to.
-const browserSyncProxy = null
+// Hot reloading is setup is APP_URL is available at .env.
+let browserSyncProxy = null;
+if (environment === "development" && (process.env.APP_URL !== undefined || process.env.APP_URL === null)) {
+  browserSyncProxy = process.env.APP_URL
+}
+
 // Used to reload browser when changes are made.
 const hotReload = browserSync.reload
 
@@ -47,7 +80,7 @@ gulp.task('scripts', () => {
       format: 'cjs',
       name: 'version',
       plugins: [
-        rollupTerser.terser(),
+        ...rollupPlugins
       ],
     })
   })
@@ -100,7 +133,7 @@ gulp.task('styles', () => {
   return gulp.src(stylesheetCompilePaths)
     .pipe(concat({path: './styles/temp.scss'}))
     .pipe(sass().on('error', sass.logError))
-    .pipe(cleanCSS())
+    .pipe(gulpif( envIsNotDevelopment || minifyEnabled, cleanCSS() ))
     .pipe(rename('style.css'))
     .pipe(gulp.dest('./'))
 })
@@ -115,7 +148,7 @@ gulp.task('block-styles', () => {
     .pipe(sass({includePaths: ['./styles/temp.scss']}).on('error', sass.logError))
     .pipe(gulp.src('./styles/temp.scss', {read: false}))
     .pipe(clean())
-    .pipe(cleanCSS())
+    .pipe(gulpif( envIsNotDevelopment || minifyEnabled, cleanCSS() ))
     .pipe(rename('block_styles.css'))
     .pipe(gulp.dest('./assets/css/'))
   })
