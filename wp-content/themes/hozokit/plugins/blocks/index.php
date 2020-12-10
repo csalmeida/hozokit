@@ -36,7 +36,7 @@ function hozokit_block_admin_warning() {
   if ( !function_exists( 'acf' ) ) {
     echo '<div class="notice notice-error is-dismissible">';
     echo "<p>There seems to be an issue with Advanced Custom fields.</p>";
-    echo "<p><b>Hozokit custom Gutenberg Blocks were not loaded.</b></p>";
+    echo "<p><b>Hozokit custom Gutenberg Blocks was not loaded.</b></p>";
     echo "</div>";
   }
 }

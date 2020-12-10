@@ -25,7 +25,7 @@ This is not a library but rather an initial setup to jumpstart the development o
 
 ## Setup
 
-Download Wordpress and copy the template folder to `wp-content/themes` folder.
+Download [Wordpress](https://wordpress.org/download/) and copy the template folder to `wp-content/themes` folder.
 Rename the template folder to match your chosen theme name.
 
 Create a database and either add the details to a `wp-config.php` file or setup using the Wordpress onboarding.
@@ -87,6 +87,10 @@ In order to build without watching for changes:
 npm run build
 ```
 > See `gulpfile.js` for all tasks.
+
+Create an `.env` filed in the [theme folder directory](wp-content/themes/hozokit). An `.env.example` file is provided as a starting point.
+
+If a `.env` file is not present the site will throw an error.
 
 [Hot Reloading can be enabled](/docs/hot_reload.md) once the steps above have been followed.
 

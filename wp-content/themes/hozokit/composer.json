@@ -1,5 +1,6 @@
 {
     "require": {
-        "timber/timber": "^1.8"
+        "timber/timber": "^1.8",
+        "vlucas/phpdotenv": "^5.2"
     }
 }
