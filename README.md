@@ -88,6 +88,10 @@ npm run build
 ```
 > See `gulpfile.js` for all tasks.
 
+Create an `.env` filed in the [theme folder directory](wp-content/themes/hozokit). An `.env.example` file is provided as a starting point.
+
+If a `.env` file is not present the site will throw an error.
+
 [Hot Reloading can be enabled](/docs/hot_reload.md) once the steps above have been followed.
 
 # Customizing the theme
