@@ -1,4 +1,7 @@
 <?php
+
+defined( 'ABSPATH' ) || exit;
+
 /*
  * This file includes setup functionality for Hozokit
  * and any additional methods that aid theme development.
@@ -32,6 +35,44 @@ class Hozokit {
 
     self::register_menus();
     self::enable_environment_variables();
+  }
+
+  /*
+   * Loads bundles styles and scripts.
+   * Can optionally reset styles with Normalize.
+   * @param {Array} $options - Accepts a set of options to configure what styles are loaded.
+   * @param {Boolean} $options['reset_styles'] - Applies Normalize style reset when enabled. Enabled by default.
+  */
+  public static function load_styles_scripts($options = array(
+    'reset_styles' => true
+  )) {
+    if ($options['reset_styles'] == true) {
+      // Normalize is used to reset styles. Remove this line if not required or an alternative is being used.
+      function hozokit_load_reset_styles() {
+        wp_enqueue_style( 'normalize', get_template_directory_uri() . '/assets/css/normalize.css', null, 'v8.0.0');
+      }
+
+      // Load styles and scripts (might need wp_head or wp_footer).
+      add_action('wp_enqueue_scripts', 'hozokit_load_reset_styles');
+    }
+
+    // Insert styles and scripts to be used in the theme.
+    // The stylesheet is compiled from SASS files in /styles, scripts from /scripts using Gulp.
+    function hozokit_load_styles_scripts() {
+      // Retrieves theme version to be provided to bundled styles and script files.
+      $theme_version = wp_get_theme()['Version'];
+
+      // Enqueues the theme's styles and scripts.
+      wp_enqueue_style( 'style', get_stylesheet_uri(), null,  $theme_version);
+      wp_register_script( 'script', get_template_directory_uri() . '/assets/scripts/bundle.js', "", $theme_version, true );
+      wp_enqueue_script('script');
+      $translation_array = array( 'templateUrl' => get_template_directory_uri() );      
+      //after wp_enqueue_script
+      wp_localize_script( 'script', 'wordpress', $translation_array );
+    }
+
+    // Load styles and scripts (might need wp_head or wp_footer).
+    add_action('wp_enqueue_scripts', 'hozokit_load_styles_scripts');
   }
 
   // Verifies if user requested to not be tracked.
