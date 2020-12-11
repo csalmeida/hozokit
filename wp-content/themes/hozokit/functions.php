@@ -18,7 +18,7 @@
   // This enqueues the files the way Wordpress intends but
   // if these need to be included a different way, remove this statement and 
   // use the enqueue functions instead: https://developer.wordpress.org/reference/hooks/wp_enqueue_scripts/#user-contributed-notes
-  // It resets styles by default (with Normalise).
+  // It resets styles by default (with Normalize).
   Hozokit::load_styles_scripts(
     array(
       'reset_styles' => true

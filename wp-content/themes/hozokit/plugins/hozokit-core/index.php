@@ -43,9 +43,11 @@ class Hozokit {
    * @param {Array} $options - Accepts a set of options to configure what styles are loaded.
    * @param {Boolean} $options['reset_styles'] - Applies Normalize style reset when enabled. Enabled by default.
   */
-  public static function load_styles_scripts($options = array(
-    'reset_styles' => true
-  )) {
+  public static function load_styles_scripts(
+    $options = array(
+      'reset_styles' => true
+    )
+  ) {
     if ($options['reset_styles'] == true) {
       // Normalize is used to reset styles. Remove this line if not required or an alternative is being used.
       function hozokit_load_reset_styles() {
