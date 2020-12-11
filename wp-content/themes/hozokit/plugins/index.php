@@ -1,4 +1,6 @@
 <?php
+  defined( 'ABSPATH' ) || exit;
+  
   // Used to include Composer dependencies where necessary.
   define('DIR_VENDOR', __DIR__ . '/vendor/');
 
