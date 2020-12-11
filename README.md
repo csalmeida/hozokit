@@ -14,6 +14,7 @@ This is not a library but rather an initial setup to jumpstart the development o
 ## Documentation
 
 - [Creating Custom Blocks](/docs/blocks.md)
+- [Enabling Environment Variables](/docs/environment_variables.md)
 - [Enabling Hot Reload](/docs/hot_reload.md)
 
 ## Requirements
@@ -88,9 +89,9 @@ npm run build
 ```
 > See `gulpfile.js` for all tasks.
 
-Create an `.env` filed in the [theme folder directory](wp-content/themes/hozokit). An `.env.example` file is provided as a starting point.
+### Optional Steps
 
-If a `.env` file is not present the site will throw an error.
+Create an `.env` filed in the [theme folder directory](wp-content/themes/hozokit). An `.env.example` file is provided as a starting point. See [related documentation](/docs/environment_variables.md) for details.
 
 [Hot Reloading can be enabled](/docs/hot_reload.md) once the steps above have been followed.
 
