@@ -24,3 +24,15 @@
       'reset_styles' => true
     )
   );
+
+  // Adds additional data to the site context.
+  // This makes it available in the templates.
+  // The filter is required so the data is added at the correct stage.
+  add_filter( 'timber/context', function( $context ) {
+    $global_context = array(
+      'example' => 'add new entries to this array to make them available anywhere in any Twig template.'
+    );
+    
+    $context = $context + $global_context;
+    return $context;
+  } );
