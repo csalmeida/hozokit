@@ -1,19 +1,27 @@
 ![Hozokit logo.](wp-content/themes/hozokit/screenshot.png)
 
-# Hozokit Template for Wordpress
-> A template that aims to streamline component based development in [Wordpress](https://wordpress.org/) using [Timber](https://www.upstatement.com/timber/).
+# Hozokit - Theme Building Framework for Wordpress
+>Hozokit gives you the power to create unique WordPress themes without the WordPress hassle.
 
-This theme template uses Gulp to bundle styles as well as a setup to create components from Twig files. Components are scoped to their respective files and can be used on demand by higher order pages such as `index`, `pages` and other.
+By combining modern web technologies and a component based architecture, Hozokit is a theme building
+framework structured clearly for both, long-time [Wordpress](https://wordpress.org/) developers and beginners.
 
-This was created to streamline the process of setting up the creation on themes and I've decided to share it in case someone else wants to make use of it. As a consequence, it is somehow opinionated. Markup and styling are mostly scoped to their own components and tools such as [Timber](https://www.upstatement.com/timber/) and [SCSS](https://sass-lang.com/) are used in favor of other ones.
+### The benefit of Hozokit is in the setup.
 
-It also makes use of Advanced Custom Fields to allow the creation of Gutenberg blocks without the need to introduce [React](https://reactjs.org/) in the codebase, this can be useful if you would like to stick mostly with HTML, CSS, Javascript and PHP.
+With [Gulp](https://gulpjs.com/) built-in, theme development is streamlined from the off, freeing you from arduous project setup
+by handling configuration and automation tasks for you. Meaning you can dive straight in to your next project. Hozokit automatically bundles styles, transpiled scripts, watches for changes and handles component files. Meaning you can get right to coding.
 
-This is not a library but rather an initial setup to jumpstart the development of custom themes for [Wordpress](https://wordpress.org/).
+Hozokit uses [Timber](https://www.upstatement.com/timber/) which keeps your PHP theme code clean so you can focus on supplying the data and logic, while [Twig](https://twig.symfony.com/) is used for your HTML output. For styling, [SCSS](https://sass-lang.com/) is used in favour of others.
+
+The component based approach helps to streamline development with markup and styling mostly scoped to their own components. Components are scoped to their respective files and can be used on demand by higher order pages such as 'index', 'pages' and other.
+
+Hozokit can also make use of [Advanced Custom Fields](https://www.advancedcustomfields.com/) if you choose. This combination enables the creation of custom Gutenberg blocks without the need to introduce [React](https://reactjs.org/) in the codebase, this can be useful if you would like to stick mostly with HTML, CSS, Javascript and PHP.
+
+This is not a library but can rather be seen as an initial setup to jumpstart the development of custom themes for [Wordpress](https://wordpress.org/).
 
 ## Documentation
 
-- [Creating Custom Blocks](/docs/blocks.md)
+- [Creating Custom Gutenberg Blocks](/docs/blocks.md)
 - [Enabling Hot Reload](/docs/hot_reload.md)
 
 ## Requirements
@@ -100,7 +108,7 @@ A starting point is to [set the theme name and other information](https://codex.
 
 ## Writing markup and setting up components
 
-This implementation uses [Timber](https://www.upstatement.com/timber/) and most of the markup is will be written in [Twig, a template engine for PHP](https://twig.symfony.com/) that allows to separate logic markup.
+This implementation uses [Timber](https://www.upstatement.com/timber/) and most of the markup will be written in [Twig, a template engine for PHP](https://twig.symfony.com/) that allows you to separate logic markup.
 
 This means that the `HTML` can include values that come from `PHP` scrips. Using Timber also abstracts some of the Wordpress API in order to make it friendlier to use.
 
@@ -115,7 +123,7 @@ Then there are more indivual files that define styling for a single component. E
 
 When styling components it is important that they have their own [`class`](https://developer.mozilla.org/en-US/docs/Web/CSS/Class_selectors) in order to avoid unexpected results in styling as all the rules will be merged into a single file.
 
-When styling components make sure to run `npm run watch` from the terminal in order to update styles. There is no hot reloading so you still need to refresh the page in order to see the results.
+When styling components make sure to run `npm run watch` from the terminal in order to update styles. 
 
 ## Creating scripts
 Scripts should be imported into `/scripts/index.js`, ECMAScript 2015+ (ES6) is supported as similar to the styling, [scripts are being transpiled](https://babeljs.io/) and then bundled into a single file at `assets/scripts/bundle.js`.
