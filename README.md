@@ -9,7 +9,7 @@ framework structured clearly for both, long-time [Wordpress](https://wordpress.o
 ### The benefit of Hozokit is in the setup.
 
 With [Gulp](https://gulpjs.com/) built-in, theme development is streamlined from the off, freeing you from arduous project setup
-by handling configuration and automation tasks for you. Meaning you can dive straight in to your next project. Hozokit automatically bundles styles, transpiled scripts, watches for changes and handles component files. Meaning you can get right to coding.
+by handling configuration and automation tasks for you. Meaning you can dive straight in to your next project. Hozokit automatically bundles styles, transpiles scripts, watches for changes and handles component files. Meaning you can get right to coding.
 
 Hozokit uses [Timber](https://www.upstatement.com/timber/) which keeps your PHP theme code clean so you can focus on supplying the data and logic, while [Twig](https://twig.symfony.com/) is used for your HTML output. For styling, [SCSS](https://sass-lang.com/) is used in favour of others.
 
