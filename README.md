@@ -21,7 +21,8 @@ This is not a library but can rather be seen as an initial setup to jumpstart th
 
 ## Documentation
 
-- [Creating Custom Gutenberg Blocks](/docs/blocks.md)
+- [Creating Custom Blocks](/docs/blocks.md)
+- [Enabling Environment Variables](/docs/environment_variables.md)
 - [Enabling Hot Reload](/docs/hot_reload.md)
 
 ## Requirements
@@ -96,9 +97,9 @@ npm run build
 ```
 > See `gulpfile.js` for all tasks.
 
-Create an `.env` filed in the [theme folder directory](wp-content/themes/hozokit). An `.env.example` file is provided as a starting point.
+### Optional Steps
 
-If a `.env` file is not present the site will throw an error.
+Create an `.env` filed in the [theme folder directory](wp-content/themes/hozokit). An `.env.example` file is provided as a starting point. See [related documentation](/docs/environment_variables.md) for details.
 
 [Hot Reloading can be enabled](/docs/hot_reload.md) once the steps above have been followed.
 
@@ -115,6 +116,96 @@ This means that the `HTML` can include values that come from `PHP` scrips. Using
 A component will usually live in `/templates/components` unless it is a part of the [Wordpress' template page system](https://developer.wordpress.org/themes/template-files-section/page-template-files/). Each component is composed of a `index.twig` and a `styles.scss`.
 
 For instance a `navigation` component could be created by adding the two files mentioned before to `templates/components/navigation`. Then it can be included in pages, become part of other components and be reused as needed.
+
+## Adding data to context
+
+The idea behind this pattern is to separate markup from php logic. To achieve this we use `$context`, a php associative array that holds the data to be used in templates.
+
+The data available to these templates can be scoped to a Wordpress view (`index.php`, `single.php`, `page.php` and so on) or globaly meaning they can be accessed from any template at any time.
+
+To define context for a specific view, we first get the current Timber context and add to it just like adding to any other associative array. Here's an `index.php` as an example:
+
+```php
+<?php
+   // Get Timber's context.
+   $context = Timber::get_context();
+
+   // Add new data to this specific view.
+   // In this case the current instance of the post (userful to get the title of the page for example)
+   // and an array with all posts
+   $context['post'] = new Timber\Post();
+   $context['posts'] = Timber::get_posts();
+
+   // Then the Twig template that should be rendered is specified
+   // and the $context with the new added values is passed to it. 
+   Timber::render( 'index.twig', $context);
+?>
+```
+
+Now all values currently present in `$context` are available to `index.twig` alongside the new `post` and `posts` values we've added in. Here's how to access these values in `index.twig`:
+
+```twig
+  {% block content %}
+    {# Using the post data added to context #}
+    <h2>{{post.title}}</h2>
+    <p>{{post.content}}</p>
+
+    <h3>Posts:</h3>
+    <ol>
+      {# Using the posts data added to context #}
+      {% for post in posts %}
+      <li><a href="{{post.link}}">{{post.title}}</a></li>
+      {% endfor %}
+    </ol>
+  {% endblock %}
+```
+
+Now the values can be accessed through a variable using dot notation, nice!
+
+However, `post` and `posts` won't be available outside `index.twig`. Sometimes it is useful to have values in `$context` that can be accessed in any template. 
+
+This is useful when, for example, it is needed to display dynamic information on a footer, or perhaps there's a menu that shows in all pages, or the user avatar.
+
+To add data to `$context` that can be accessed in any template (globally) we need to make use of a filter. Here's an example in `functions.php`:
+
+```php
+  // Adds additional data to the site context.
+  // This makes it available in the templates.
+  // The filter is required so the data is added at the correct stage.
+  add_filter( 'timber/context', function( $context ) {
+    # Add the new data here.
+    $global_context = array(
+      'example' => 'add new entries to this array to make them available anywhere in any Twig template.',
+      'user_is_admin' => current_user_can('administrator')
+    );
+    
+    # Merges your additions with the current context.
+    $context = $context + $global_context;
+    return $context;
+  } );
+```
+
+To use it, we can reference it in our templates the same way as before. Here's an updated example of `index.twig`, notice how `example` is used but it was not added to context via `index.php` but via `functions.php`:
+
+```twig
+  {% block content %}
+    {# Added via index.php #}
+    <h2>{{post.title}}</h2>
+    <p>{{post.content}}</p>
+
+    <h3>Posts:</h3>
+    <ol>
+    {# Added via index.php #}
+      {% for post in posts %}
+      <li><a href="{{post.link}}">{{post.title}}</a></li>
+      {% endfor %}
+    </ol>
+
+    {# Added via functions.php and can be accessed in other templates #}
+    <blockquote>{{example}}</blockquote>
+  {% endblock %}
+```
+
 
 ## Styling the theme and components
 Styles are written in [SCSS](https://sass-lang.com/) files and are then merged and converted into a `style.css` for the browser to understand. There are two strands of files, *base* files that live in `/styles` such as `base.scss` or `palette.scss` which hold rules that multiple elements and components make use of.

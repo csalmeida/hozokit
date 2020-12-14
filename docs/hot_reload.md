@@ -6,6 +6,8 @@ Developers might setup their server in many different ways so this needs to be c
 
 > To setup and install Hozokit, please follow the setup section of the README before following this guide.
 
+**This feature requires environment variables to be setup, please [follow the documentation on how to this](./environment_variables.md) if this is not already in place.**
+
 ## Configure your proxy
 
 Follow these steps if hot reloading is something you would like to enable.
