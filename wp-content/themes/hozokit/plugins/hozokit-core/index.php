@@ -49,7 +49,7 @@ class Hozokit {
     )
   ) {
     if ($options['reset_styles'] == true) {
-      // Normalize is used to reset styles. Remove this line if not required or an alternative is being used.
+      // Normalize is used to reset styles. This can be disabled via the reset_styles option.
       function hozokit_load_reset_styles() {
         wp_enqueue_style( 'normalize', get_template_directory_uri() . '/assets/css/normalize.css', null, 'v8.0.0');
       }
@@ -64,12 +64,15 @@ class Hozokit {
       // Retrieves theme version to be provided to bundled styles and script files.
       $theme_version = wp_get_theme()['Version'];
 
-      // Enqueues the theme's styles and scripts.
+      // Enqueues the theme's styles.
       wp_enqueue_style( 'style', get_stylesheet_uri(), null,  $theme_version);
+
+      // Enqueues the theme's scripts.
       wp_register_script( 'script', get_template_directory_uri() . '/assets/scripts/bundle.js', "", $theme_version, true );
       wp_enqueue_script('script');
-      $translation_array = array( 'templateUrl' => get_template_directory_uri() );      
-      //after wp_enqueue_script
+
+      // Has to run after wp_enqueue_script().
+      $translation_array = array( 'templateUrl' => get_template_directory_uri() );
       wp_localize_script( 'script', 'wordpress', $translation_array );
     }
 
