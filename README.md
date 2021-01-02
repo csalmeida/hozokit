@@ -67,7 +67,7 @@ Once the generator has finished running the following steps might be required if
 1. Setup a webserver cabable of running php and create a mySQL database for Wordpress. Read [how to install Wordpress](https://wordpress.org/support/article/how-to-install-wordpress/) to learn more.
 
 1. Install Hozokit Node dependencies for your theme. (required if the installing dependencies step has not been sucessful)
-   1. Change directory to `wp-content/themes/your-project-name`
+   1. Change directory to `your-project-name/wp-content/themes/your-project-name`
    1. Check you are using Node version _14.15.1_ by running `node --version`
    1. Run `npm install` to install dependencies
 1. To start development run `npm start`
