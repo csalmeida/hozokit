@@ -12,7 +12,7 @@ Developers might setup their server in many different ways so this needs to be c
 
 Follow these steps if hot reloading is something you would like to enable.
 
-1. Find the url of you local Wordpress instalation for your project. This will be `localhost:3000` in a lot of cases but it could also be something custom such as `hozokit.test`
+1. Find the url of you local WordPress installation for your project. This will be `localhost:3000` in a lot of cases but it could also be something custom such as `hozokit.test`
 2. Set `APP_URL` to the server url at the `.env` file, located at the theme folder directory. An `.env.example` is provided for reference. The `http://` or `https://` portion needs to be included.
 
 Here's how a setup for hot reloading can look like in `.env`: 
@@ -26,9 +26,9 @@ APP_URL='https://hozokit.test'
 
 3. Run `npm start` to start watching files. Every time a file is saved it should reload the page. 
 
-The url to access the site will be `http://localhost:2077` even if it wasn't before hot reloading was enabled. This is correct, it means browser-sync is working correctly.
+The URL to access the site will be `http://localhost:2077`, even if it wasn't before hot reloading was enabled. This is correct, it means browser-sync is working correctly.
 
-In some cases the browser might issue a warning suggesting that the connection is not secure. this happens due an invalid SSL certificates but it does not impact how the sites locally in any way.
+In some cases the browser might issue a warning suggesting that the connection is not secure. This can happen due to an invalid SSL certificate - but it does not impact the site locally in any way.
 
 To get past the warning screen browsers provide the option of adding an exception for the site or an *"enter site"* link.
 
