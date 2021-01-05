@@ -257,7 +257,7 @@ When styling components it is important that they have their own [`class`](https
 
 When styling components make sure to run `npm run watch` or `npm start` from the terminal in order to update styles. 
 
-> To enable Hot Reloading [follow this link](/docs/hot_reload.md) more more information.
+> To enable Hot Reloading [follow this link](/docs/hot_reload.md) for more information.
 
 
 ## Creating scripts
