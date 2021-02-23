@@ -263,7 +263,7 @@ When styling components make sure to run `npm run watch` or `npm start` from the
 ## Creating scripts
 Scripts should be imported into `/scripts/index.js`, ECMAScript 2015+ (ES6) is supported as similar to the styling, [scripts are transpiled](https://babeljs.io/) and then bundled into a single file at `assets/scripts/bundle.js`.
 
-Scripts can be splited into multiple files and imported as needed.
+Scripts can be split into multiple files and imported as needed.
 
 
 ### Supporting and maintaining the project
