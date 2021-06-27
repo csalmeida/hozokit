@@ -2,7 +2,7 @@
 const gulp = require('gulp');
 
 // Used in compiling SCSS to CSS.
-const sass = require('gulp-sass');
+const sass = require('gulp-sass')(require('sass'));
 const clean = require('gulp-clean');
 const cleanCSS = require('gulp-clean-css');
 const rename = require('gulp-rename');
@@ -17,6 +17,7 @@ const rollupBabel = require('rollup-plugin-babel');
 // Manages environment variables.
 const dotenv = require('dotenv');
 const gulpif = require('gulp-if');
+
 // Used to enable hot reloading.
 const browserSync = require('browser-sync').create();
 
