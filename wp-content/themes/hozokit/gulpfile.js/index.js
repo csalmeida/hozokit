@@ -1,5 +1,6 @@
 // Used to create tasks.
 const gulp = require('gulp');
+const { src, dest, watch, series } = require('gulp');
 
 // Used in compiling SCSS to CSS.
 const sass = require('gulp-sass')(require('sass'));
@@ -20,6 +21,8 @@ const gulpif = require('gulp-if');
 
 // Used to enable hot reloading.
 const browserSync = require('browser-sync').create();
+
+const { componentForwarding } = require('./componentForwarding');
 
 // Initializes environment variables.
 // Will look available variables in .env file.
@@ -94,8 +97,8 @@ gulp.task('scripts', () => {
 
 const stylesheetCompilePaths = [
   'styles/base.scss',
-  'templates/components/*/style.scss',
-  'templates/blocks/*/style.scss',
+  // 'templates/components/*/style.scss',
+  // 'templates/blocks/*/style.scss',
 ]
 
 /* These files are concatenated into a temp.scss
@@ -114,8 +117,10 @@ const stylesheetBlockCompilePaths = [
 */
 const stylesheetWatchPaths = [
   'styles/*.scss',
-  'templates/components/*/*.scss',
+  'templates/components/**/*.scss',
+  'templates/components/**', // This path is needed to determine if a whole component folder has been removed.
   'templates/blocks/*/*.scss',
+  '!styles/components.scss',
   '!styles/temp.scss'
 ]
 
@@ -132,7 +137,25 @@ const markupWatchPaths = [
 /* Compiles a style.css for the front facing side of the site. */
 gulp.task('styles', () => {
   return gulp.src(stylesheetCompilePaths)
-    .pipe(concat({path: './styles/temp.scss'}))
+    // .pipe(concat({path: './styles/temp.scss'}))
+    .pipe(sass().on('error', sass.logError))
+    .pipe(gulpif( envIsNotDevelopment || minifyEnabled, cleanCSS() ))
+    .pipe(rename('style.css'))
+    .pipe(gulp.dest('./'))
+})
+
+function styles() {
+  return src(stylesheetCompilePaths)
+  // .pipe(concat({path: './styles/temp.scss'}))
+  .pipe(sass().on('error', sass.logError))
+  .pipe(gulpif( envIsNotDevelopment || minifyEnabled, cleanCSS() ))
+  .pipe(rename('style.css'))
+  .pipe(dest('./'))
+}
+
+gulp.task('styles', () => {
+  return gulp.src(stylesheetCompilePaths)
+    // .pipe(concat({path: './styles/temp.scss'}))
     .pipe(sass().on('error', sass.logError))
     .pipe(gulpif( envIsNotDevelopment || minifyEnabled, cleanCSS() ))
     .pipe(rename('style.css'))
@@ -156,7 +179,7 @@ gulp.task('block-styles', () => {
 })
 
 /* Registers changes in scrips and sass files. */
-gulp.task('watch', () => {
+function watcher(callback) {
   if (browserSyncProxy != null && typeof(browserSyncProxy) != 'undefined') {
     // Initiates Browser Sync to allow hot reloading when watching files.
     browserSync.init({
@@ -170,7 +193,7 @@ gulp.task('watch', () => {
     gulp.watch('scripts/*.js', gulp.series('scripts'))
     .on("change", hotReload)
     
-    gulp.watch(stylesheetWatchPaths, gulp.series(['styles', 'block-styles']))
+    gulp.watch(stylesheetWatchPaths, gulp.series([componentForwarding, 'styles']))
     .on("change", hotReload)
 
     gulp.watch(markupWatchPaths)
@@ -181,13 +204,21 @@ gulp.task('watch', () => {
     console.info('Find examples of proxies at: https://www.browsersync.io/docs/options/#option-proxy')
     console.info('Files will still be watched and compiled.\n')
 
-    gulp.watch('scripts/*.js', gulp.series('scripts'))
-    gulp.watch(stylesheetWatchPaths, gulp.series(['styles', 'block-styles']))
+    watch('scripts/*.js', series('scripts'))
+    watch(stylesheetWatchPaths)
+    .on('change', series([componentForwarding, styles])) // Keeps track of changes in files.
+    .on('unlinkDir', series([componentForwarding, styles])) // Makes sure to unlink any components if a whole directory is removed.
+    .on('unlink', series([componentForwarding, styles])) // Makes sure these tasks run when a style file is removed.
   }
-})
+
+  callback() // This task does not return anything so the callback pattern is used.
+}
 
 /* Compiles all files. */
-gulp.task('build', gulp.series(['scripts', 'styles', 'block-styles']))
+gulp.task('build', gulp.series(['scripts', 'styles']))
+
+/* Watches files during development. */
+exports.watch = watcher
 
 /* The default task builds styles and scripts before watching. */
-gulp.task('default', gulp.series(['build', 'watch']))
+gulp.task('default', gulp.series(['build', watcher]))
