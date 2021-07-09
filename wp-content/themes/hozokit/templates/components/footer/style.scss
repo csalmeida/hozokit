@@ -1,3 +1,5 @@
+@use "../../../styles/abstracts/variables" as v;
+
 .footer {
-  font-family: $primary-font;  
+  font-family: v.$primary-font;  
 }

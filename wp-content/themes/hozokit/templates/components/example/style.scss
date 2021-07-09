@@ -1,9 +1,11 @@
+@use "../../../styles/abstracts/variables" as v;
+
 .example {
   h1 {
-    font-family: $primary-font;
+    font-family: v.$primary-font;
   }
 
   p {
-    font-family: $secondary-font;
+    font-family: v.$secondary-font;
   }
 }
