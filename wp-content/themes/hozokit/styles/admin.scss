@@ -39,7 +39,6 @@ body.wp-admin {
   @include a.post-heading-defaults(a.$secondary-font);
 }
 
-.wp-block-paragraph, .editor-block-list__block {
+.block-editor__typewriter {
   font-family: a.$secondary-font;
-  // font-size: 2rem;
 }
