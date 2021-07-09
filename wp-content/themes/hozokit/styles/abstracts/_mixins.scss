@@ -1,0 +1,38 @@
+/* Include a font file into theme style. */
+@mixin font($name, $path, $weight: 400, $style: normal, $format: "truetype",) {
+  @font-face {
+    font-family: $name;
+    src: url($path) format($format);
+    font-style: $style;
+    font-weight: $weight;
+  }
+}
+
+/* Sets post text defaults to be used on admin and post stylesheets. */
+@mixin post-heading-defaults($font-family, $color: "#c1c1c1", $size: 2.6rem, $margin-top-bottom: 3rem) {
+  // @warn "Deprecated: There might be a better way of defining heading styles and sizes today. Keep this mixin if running a theme on Hozokit 1.0 or below that relies on this method to set heading sizes.";
+
+  h1, h2, h3, h4, h5, h6 {
+    text-transform: none;
+    font-family: $font-family;
+    font-size: $size;
+    color: $color;
+    margin: $margin-top-bottom 0; 
+   }
+
+   h3 { font-size: $size - .2; }
+   h3 { font-size: $size - .4; }
+   h4 { font-size: $size - .6; }
+   h5 { font-size: $size - .8; }
+   h6 { font-size: $size - 1; }
+}
+
+/* Makes component and block styles available
+ * to the Gutenberg Editor without leaking into the admin page.
+ * This second mixin is required in order for SASS to parse all styles correctly.
+*/
+@mixin block-styles {
+  .acf-block-component {
+    @content;
+  }
+}

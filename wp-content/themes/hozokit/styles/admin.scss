@@ -1,43 +1,45 @@
 /* Gutenberg blocks require their CSS 
    to be on a separate stylesheet to
    avoid conflicts on the admin panel. */
-
-/* This stylesheet overrides theme styles
-   that might be applied to elements on the admin panel. */
-
+   
 /* 
  * These styles apply to the admin panel of Wordpress.
  * It merges with block styles on compilation.
  * It can also style related plugins.
 */
-@import 'mixins';
-@import 'media_queries';
-@import 'palette';
 
-// Blocks will display fonts on the editor.
-@include set-font-path('admin');
-@import 'fonts';
+/* This stylesheet can also be used
+ * to override unwanted theme styles that might 
+ * be applied to elements on the admin panel. 
+*/
 
-@include block-styles {
-  @import 'temp';
+@use "sass:meta" as meta;
+
+// Brings abstracts with the correct font path for the admin.
+// Setting the font paths allows blocks to display declared theme fonts on the editor.
+@use "abstracts" as a with (
+  $font-path: "../fonts/"
+);
+
+// Bringing block specific styles.
+@include a.block-styles {
+  @include meta.load-css("components");
+  @include meta.load-css("blocks");
 }
 
 body.wp-admin {
   padding-top: 0;
 }
 
-.wp-toolbar {
-  font-size: 10px;
-}
-
 #post-title-0 {
-  font-family: $primary-font;
+  font-family: a.$primary-font;
 }
 
 .wp-block-heading {
-  @include post-heading-defaults;
+  @include a.post-heading-defaults(a.$secondary-font);
 }
+
 .wp-block-paragraph, .editor-block-list__block {
-  font-family: $secondary-font;
-  font-size: 2rem;
+  font-family: a.$secondary-font;
+  // font-size: 2rem;
 }
