@@ -95,91 +95,84 @@ gulp.task('scripts', () => {
   minifies CSS.
 */
 
-const stylesheetCompilePaths = [
-  'styles/base.scss',
-  // 'templates/components/*/style.scss',
-  // 'templates/blocks/*/style.scss',
-]
 
-/* These files are concatenated into a temp.scss
- * which is used by admin.scss to scope styles to
- * the component editor in the admin panel of Wordpress.
-*/
-const stylesheetBlockCompilePaths = [
-  'styles/general.scss',
-  'templates/components/*/style.scss',
-  'templates/blocks/*/style.scss',
-]
+/**
+ * Paths to compile a theme stylesheet (style.css)
+ * and another for the admin side to style blocks (block_styles.css)
+ */
+const stylesheetCompilePath = 'styles/base.scss'
+const stylesheetBlockCompilePath = 'styles/admin.scss'
 
-/* Watches changes in all stylesheets
- * but the temp.scss file used to
- * create a compiled version of styles.
+/**
+ * Watches changes in most stylesheets
+ * aside from component and block imports. 
+ * Used to trigger style compilation or in some cases browser reloads.
 */
 const stylesheetWatchPaths = [
-  'styles/*.scss',
+  'styles/**/*.scss',
   'templates/components/**/*.scss',
   'templates/components/**', // This path is needed to determine if a whole component folder has been removed.
-  'templates/blocks/*/*.scss',
-  '!styles/components.scss',
-  '!styles/temp.scss'
+  'templates/blocks/**/*.scss',
+  'templates/blocks/**', // This path is needed to determine if a whole blocks folder has been removed.
+  '!styles/_components.scss', // Ignores this file in order to not throw the watcher into a loop.
+  '!styles/_blocks.scss' // Ignores this file in order to not throw the watcher into a loop.
+]
+
+/**
+ * The partials that list components.
+ * These are watched on their own to avoid triggering
+ * the component forwarding task which would throw the watcher into an infinite loop.
+*/
+const componentPartialWatchPaths = [
+  'styles/_components.scss',
+  'styles/_blocks.scss'
 ]
 
 /* 
  * Watches changes in .twig and php files.
  * php is included because it could include markup
- * or reason to reload in some edge cases. 
+ * or another reason to reload in some edge cases. 
 */
 const markupWatchPaths = [
   'templates/**/*.twig',
   '**/*.php',
 ]
 
-/* Compiles a style.css for the front facing side of the site. */
-gulp.task('styles', () => {
-  return gulp.src(stylesheetCompilePaths)
-    // .pipe(concat({path: './styles/temp.scss'}))
-    .pipe(sass().on('error', sass.logError))
-    .pipe(gulpif( envIsNotDevelopment || minifyEnabled, cleanCSS() ))
-    .pipe(rename('style.css'))
-    .pipe(gulp.dest('./'))
-})
-
+/**
+ * Compiles styles into a style.css.
+ * Used to render theme styling.
+ * @returns {Stream}
+ */
 function styles() {
-  return src(stylesheetCompilePaths)
-  // .pipe(concat({path: './styles/temp.scss'}))
-  .pipe(sass().on('error', sass.logError))
+  return src(stylesheetCompilePath)
+  .pipe(sass.sync().on('error', sass.logError))
   .pipe(gulpif( envIsNotDevelopment || minifyEnabled, cleanCSS() ))
   .pipe(rename('style.css'))
   .pipe(dest('./'))
 }
 
-gulp.task('styles', () => {
-  return gulp.src(stylesheetCompilePaths)
-    // .pipe(concat({path: './styles/temp.scss'}))
-    .pipe(sass().on('error', sass.logError))
-    .pipe(gulpif( envIsNotDevelopment || minifyEnabled, cleanCSS() ))
-    .pipe(rename('style.css'))
-    .pipe(gulp.dest('./'))
-})
-
-/* Compiles styles scoped to the block editor. */
-gulp.task('block-styles', () => {
-  return gulp.src(stylesheetBlockCompilePaths)
-  .pipe(concat({path: './styles/temp.scss'}))
-  .pipe(gulp.dest('./'))
-  .on('finish', () => {
-    gulp.src('./styles/admin.scss')
-    .pipe(sass({includePaths: ['./styles/temp.scss']}).on('error', sass.logError))
-    .pipe(gulp.src('./styles/temp.scss', {read: false}))
+/** 
+ * Compiles styles scoped to the block editor.
+ * Resulting file is assets/css/block_styles.css
+ * Used to style blocks and other items on the admin side as needed.
+ */
+function blockStyles() {
+  return gulp.src(stylesheetBlockCompilePath)
+    .pipe(sass.sync(/* {outputStyle: 'compressed'} */).on('error', sass.logError))
     .pipe(clean())
     .pipe(gulpif( envIsNotDevelopment || minifyEnabled, cleanCSS() ))
     .pipe(rename('block_styles.css'))
     .pipe(gulp.dest('./assets/css/'))
-  })
-})
+}
 
-/* Registers changes in scrips and sass files. */
+/**
+ * Registers changes in scripts and sass files. 
+ * Will enable hot reloading if APP_URL environment variable is provided.
+*/
 function watcher(callback) {
+  // A series of tasks to be performed by the watcher.
+  const styleSeries = [componentForwarding, styles, blockStyles];
+
   if (browserSyncProxy != null && typeof(browserSyncProxy) != 'undefined') {
     // Initiates Browser Sync to allow hot reloading when watching files.
     browserSync.init({
@@ -193,7 +186,7 @@ function watcher(callback) {
     gulp.watch('scripts/*.js', gulp.series('scripts'))
     .on("change", hotReload)
     
-    gulp.watch(stylesheetWatchPaths, gulp.series([componentForwarding, 'styles']))
+    gulp.watch(stylesheetWatchPaths, gulp.series(styleSeries))
     .on("change", hotReload)
 
     gulp.watch(markupWatchPaths)
@@ -205,17 +198,22 @@ function watcher(callback) {
     console.info('Files will still be watched and compiled.\n')
 
     watch('scripts/*.js', series('scripts'))
+
+    // Keeps watch over style files and runs associated tasks.
     watch(stylesheetWatchPaths)
-    .on('change', series([componentForwarding, styles])) // Keeps track of changes in files.
-    .on('unlinkDir', series([componentForwarding, styles])) // Makes sure to unlink any components if a whole directory is removed.
-    .on('unlink', series([componentForwarding, styles])) // Makes sure these tasks run when a style file is removed.
+    .on('change', series(styleSeries)) // Keeps track of changes in files.
+    .on('unlinkDir', series(styleSeries)) // Makes sure to unlink any components if a whole directory is removed.
+    .on('unlink', series(styleSeries)) // Makes sure these tasks run when a style file is removed.
+
+    // Compiles styles when component partials are changed. 
+    watch(componentPartialWatchPaths, series([styles, blockStyles]))
   }
 
   callback() // This task does not return anything so the callback pattern is used.
 }
 
 /* Compiles all files. */
-gulp.task('build', gulp.series(['scripts', 'styles']))
+gulp.task('build', gulp.series(['scripts', styles]))
 
 /* Watches files during development. */
 exports.watch = watcher
