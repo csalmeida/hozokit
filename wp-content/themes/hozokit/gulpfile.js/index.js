@@ -4,10 +4,7 @@ const { src, dest, watch, series } = require('gulp');
 
 // Used in compiling SCSS to CSS.
 const sass = require('gulp-sass')(require('sass'));
-const clean = require('gulp-clean');
-const cleanCSS = require('gulp-clean-css');
 const rename = require('gulp-rename');
-const concat = require('gulp-concat');
 
 // Used in bundling JavaScript.
 const rollup = require('rollup');
@@ -17,7 +14,6 @@ const rollupBabel = require('rollup-plugin-babel');
 
 // Manages environment variables.
 const dotenv = require('dotenv');
-const gulpif = require('gulp-if');
 
 // Used to enable hot reloading.
 const browserSync = require('browser-sync').create();
@@ -59,17 +55,9 @@ if (environment === "development" && (process.env.APP_URL !== undefined || proce
 const hotReload = browserSync.reload
 
 /*
-  Tasked with reloading the browser window everytime there are changes.
-*/
-gulp.task('hot-reload', function (done) {
-  browserSync.reload();
-  done();
-});
-
-/*
   Transpiles JavaScript files using Rollup.
 */
-gulp.task('scripts', () => {
+function scripts() {
   return rollup.rollup({
     input: './scripts/index.js',
     plugins: [
@@ -88,7 +76,7 @@ gulp.task('scripts', () => {
       ],
     })
   })
-})
+}
 
 /*
   Compiles SCSS into CSS,
@@ -144,9 +132,10 @@ const markupWatchPaths = [
  * @returns {Stream}
  */
 function styles() {
+  const outputStyle = envIsNotDevelopment|| minifyEnabled ? 'compressed' : 'expanded'
+
   return src(stylesheetCompilePath)
-  .pipe(sass.sync().on('error', sass.logError))
-  .pipe(gulpif( envIsNotDevelopment || minifyEnabled, cleanCSS() ))
+  .pipe(sass.sync({ outputStyle }).on('error', sass.logError))
   .pipe(rename('style.css'))
   .pipe(dest('./'))
 }
@@ -157,10 +146,10 @@ function styles() {
  * Used to style blocks and other items on the admin side as needed.
  */
 function blockStyles() {
+  const outputStyle = envIsNotDevelopment|| minifyEnabled ? 'compressed' : 'expanded'
+  
   return gulp.src(stylesheetBlockCompilePath)
-    .pipe(sass.sync(/* {outputStyle: 'compressed'} */).on('error', sass.logError))
-    .pipe(clean())
-    .pipe(gulpif( envIsNotDevelopment || minifyEnabled, cleanCSS() ))
+    .pipe(sass.sync({ outputStyle }).on('error', sass.logError))
     .pipe(rename('block_styles.css'))
     .pipe(gulp.dest('./assets/css/'))
 }
@@ -183,13 +172,13 @@ function watcher(callback) {
       }
     })
 
-    gulp.watch('scripts/*.js', gulp.series('scripts'))
+    watch('scripts/*.js', series(scripts))
     .on("change", hotReload)
     
-    gulp.watch(stylesheetWatchPaths, gulp.series(styleSeries))
+    watch(stylesheetWatchPaths, series(styleSeries))
     .on("change", hotReload)
 
-    gulp.watch(markupWatchPaths)
+    watch(markupWatchPaths)
     .on("change", hotReload)
   } else {
     // Informs that hot reloading is not available.
@@ -197,7 +186,8 @@ function watcher(callback) {
     console.info('Find examples of proxies at: https://www.browsersync.io/docs/options/#option-proxy')
     console.info('Files will still be watched and compiled.\n')
 
-    watch('scripts/*.js', series('scripts'))
+    // Bundles scripts.
+    watch('scripts/*.js', series(scripts))
 
     // Keeps watch over style files and runs associated tasks.
     watch(stylesheetWatchPaths)
@@ -212,11 +202,20 @@ function watcher(callback) {
   callback() // This task does not return anything so the callback pattern is used.
 }
 
+/**
+ * Transpiles scripts and compiles styles.
+ * Exits task once done.
+*/
+function build(callback) {
+  series([scripts, componentForwarding, styles, blockStyles])
+  callback()
+}
+
 /* Compiles all files. */
-gulp.task('build', gulp.series(['scripts', styles]))
+exports.build = build
 
 /* Watches files during development. */
 exports.watch = watcher
 
 /* The default task builds styles and scripts before watching. */
-gulp.task('default', gulp.series(['build', watcher]))
+exports.default = series([build, watcher])
