@@ -4,12 +4,12 @@ const path = require("path")
 
 // Components partial path is where all styles from components
 // that live in /templates/components are forwared to.
-const componentsPartialPath = `./styles/components.scss`
+const componentsPartialPath = `./styles/_components.scss`
 
 /**
  * Reads files contents of the components partial.
  * Useful to then determine if any statements need to be updated.
- * @param {string} componentsPartialPath The part to the components partial file. Usually called components.scss
+ * @param {string} componentsPartialPath The part to the components partial file. Usually called _components.scss
  * @return {string} All file data in a string format. Useful to pass through a RegEx check.
  */
 function readComponentsPartial(componentsPartialPath) {
@@ -26,7 +26,7 @@ function readComponentsPartial(componentsPartialPath) {
 
 /**
  * Removes component `@forward` statement if corresponding style.scss file is not existent.
- * @param {string} partialPath A file path to remove the statement from. Usually points to components.scss
+ * @param {string} partialPath A file path to remove the statement from. Usually points to _components.scss
  * @param {string} componentPath The path to the component, it could be e.g /button or something more complex such as /buttons/dropdown
  */
 function removeComponent(partialPath, componentPath) {
@@ -57,7 +57,7 @@ function removeComponent(partialPath, componentPath) {
 /**
  * Adds a component `@forward` statement if corresponding style.scss file is added.
  * No new statement is added if one is already present.
- * @param {string} partialPath A file path to add the statement to. Usually points to components.scss
+ * @param {string} partialPath A file path to add the statement to. Usually points to _components.scss
  * @param {string} componentPath The path to the component, it could be e.g /button or something more complex such as /buttons/dropdown
  */
 function addComponent(partialPath, componentPath) {
@@ -76,7 +76,7 @@ function addComponent(partialPath, componentPath) {
     // In the case a @forward to this style.scss is not present file, add one.
     if (!isPresentInFile) {
       // String that is appended to the file with the component path.
-      const forwardStatement = `\n@forward '../templates/components/${componentPath}/style';`
+      const forwardStatement = `\n@forward "../templates/components/${componentPath}/style";`
 
       // Appends new statement to current file data.
       const updatedData = removeBlankLines( fileData.toString() + forwardStatement )
@@ -94,14 +94,14 @@ function addComponent(partialPath, componentPath) {
 }
 
 /**
- * Extracts all component declarations in components.scss and removes entries for ones that no longer exist.
+ * Extracts all component declarations in _components.scss and removes entries for ones that no longer exist.
  * Used in cases where a component might have been removed and could still be present in the partial.
- * @param {string} partialPath A file path to add the statement to. Usually points to components.scss
+ * @param {string} partialPath A file path to add the statement to. Usually points to _components.scss
  * @param {string} componentPathPattern A RegEx pattern used to find component statements in the file. Should match only the path to the component and not the whole `@forward` statement.
  * @param {string} componentsDir The path to where components are stored. This is used to determine if styles for the component exist.
  */
 function removeUnlinkedForwards(partialPath, componentPathPattern, componentsDir) {
-    // Finds all component paths declared in ./styles/components.scss
+    // Finds all component paths declared in ./styles/_components.scss
     const declaredComponents = readComponentsPartial(partialPath).match(componentPathPattern)
 
     // Check if a style file exists for each path, remove statements when the file is missing.
@@ -112,7 +112,7 @@ function removeUnlinkedForwards(partialPath, componentPathPattern, componentsDir
         if(fs.existsSync(stylesFile)) {
           // When the file exists do nothing.
         } else {
-          // When the file does not exist, remove the component declaration from the components.scss file.
+          // When the file does not exist, remove the component declaration from the _components.scss file.
           removeComponent(partialPath, componentPath)
         }
       } catch (err) {
@@ -128,7 +128,7 @@ function removeUnlinkedForwards(partialPath, componentPathPattern, componentsDir
  */
 function removeBlankLines(value) {
   // Pattern to remove blank lines in a document.  
-  const blankLines = new RegExp(/(^[ \t]*\n)/, "gm")
+  const blankLines = new RegExp(/(^[ \t]*\n)/gm)
   return value.replace(blankLines, "")
 } 
 
@@ -160,7 +160,7 @@ function readAllFiles(directory, arrayOfFiles) {
         // Ignores any other files such as index.twig.
         if (file === 'style.scss') {
           // Pattern used to pluck component path out of string.
-          const componentPathPattern = new RegExp(/(?<=components\/).*(?=\/style)/g)
+          const componentPathPattern = new RegExp(`(?<=components\/).*(?=\/style)`, "g")
           // Retrieves component path out of string.
           const componentPath = path.join("./", componentsDir, "/", file).match(componentPathPattern)
           // Adds the path to the array.
@@ -194,7 +194,7 @@ function updateComponentForwards(directory, componentsPartialPath) {
     console.log(filePaths)
 
     // For each file found determine if the directory exists.
-    // Determine if a @forward statement should be added or to components.scss.
+    // Determine if a @forward statement should be added or to _components.scss.
     // Has the components directory as a source of truth.
     filePaths.forEach(componentPath => {
       console.log(componentPath)
@@ -230,12 +230,12 @@ function updateComponentForwards(directory, componentsPartialPath) {
 */
 function componentForwarding(callback) {
   // This pattern is used to find all forwards declared in components.
-  const componentNamePattern = new RegExp(/(?<=components\/)(.*\/)?([^\/]*)(?=\/style('|");)/g)
+  const componentNamePattern = new RegExp(`(?<=components\/)(.*\/)?([^\/]*)(?=\/style('|");)`, "g")
 
   // Where component files (e.g button/index.twig and button/style.scss) are stored. 
   const componentsDir = "./templates/components"
   
-  // Scan components.scss and remove any statements that point to nonexistent files.
+  // Scan _components.scss and remove any statements that point to nonexistent files.
   removeUnlinkedForwards(componentsPartialPath, componentNamePattern, componentsDir)
   // Look recursively in the component directory for new components that need to be added to the list, or removed when no style file is present in the directory.
   updateComponentForwards(componentsDir, componentsPartialPath) 
