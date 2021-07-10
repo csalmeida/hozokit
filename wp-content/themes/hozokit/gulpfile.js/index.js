@@ -184,7 +184,7 @@ function watcher(callback) {
     .on("change", hotReload)
   } else {
     // Informs that hot reloading is not available.
-    console.info('\n🛑 Hot reloading is not available. Add the address of your server to browserSyncProxy in gulpfile.js')
+    console.info('\n🛑 Hot reloading is not available. Add the address of your server to APP_URL in .env')
     console.info('Find examples of proxies at: https://www.browsersync.io/docs/options/#option-proxy')
     console.info('Files will still be watched and compiled.\n')
 
