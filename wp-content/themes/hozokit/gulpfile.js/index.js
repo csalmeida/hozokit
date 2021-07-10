@@ -1,5 +1,4 @@
 // Used to create tasks.
-const gulp = require('gulp');
 const { src, dest, watch, series } = require('gulp');
 
 // Used in compiling SCSS to CSS.
@@ -148,10 +147,10 @@ function styles() {
 function blockStyles() {
   const outputStyle = envIsNotDevelopment|| minifyEnabled ? 'compressed' : 'expanded'
   
-  return gulp.src(stylesheetBlockCompilePath)
+  return src(stylesheetBlockCompilePath)
     .pipe(sass.sync({ outputStyle }).on('error', sass.logError))
     .pipe(rename('block_styles.css'))
-    .pipe(gulp.dest('./assets/css/'))
+    .pipe(dest('./assets/css/'))
 }
 
 /**
@@ -176,6 +175,9 @@ function watcher(callback) {
     .on("change", hotReload)
     
     watch(stylesheetWatchPaths, series(styleSeries))
+    .on("change", hotReload)
+
+    watch(componentPartialWatchPaths, series([styles, blockStyles]))
     .on("change", hotReload)
 
     watch(markupWatchPaths)
