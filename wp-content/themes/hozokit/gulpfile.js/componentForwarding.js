@@ -161,29 +161,31 @@ function readAllFiles(directory, componentFolderName, arrayOfFiles) {
     // Updates array to provided values (from a previous iteration) or keeps it blank if it's the first one.
     arrayOfFiles = arrayOfFiles || []
     
-    // For every file found add it to the list.
-    files.forEach(function(file) {
-      // If file is a directory run the function again adding all paths already collected.
-      if (fs.statSync(componentsDir + "/" + file).isDirectory()) {
-        arrayOfFiles = readAllFiles(componentsDir + "/" + file, componentFolderName, arrayOfFiles)
-      } else {
-        // Proceed to add item to the list if a file is present.
-        // Ignores any other files such as index.twig.
-        if (file === 'style.scss') {
-          // Pattern used to pluck component path out of string.
-          const componentPathPattern = new RegExp(`(?<=${componentFolderName}\/).*(?=\/style)`, "g")
-          // Retrieves component path out of string.
-          const componentPath = path.join("./", componentsDir, "/", file).match(componentPathPattern)[0]
-          // Adds the path to the array.
-          arrayOfFiles.push(componentPath)
+    if (arrayOfFiles.length) {
+      // For every file found add it to the list.
+      files.forEach(function(file) {
+        // If file is a directory run the function again adding all paths already collected.
+        if (fs.statSync(componentsDir + "/" + file).isDirectory()) {
+          arrayOfFiles = readAllFiles(componentsDir + "/" + file, componentFolderName, arrayOfFiles)
+        } else {
+          // Proceed to add item to the list if a file is present.
+          // Ignores any other files such as index.twig.
+          if (file === 'style.scss') {
+            // Pattern used to pluck component path out of string.
+            const componentPathPattern = new RegExp(`(?<=${componentFolderName}\/).*(?=\/style)`, "g")
+            // Retrieves component path out of string.
+            const componentPath = path.join("./", componentsDir, "/", file).match(componentPathPattern)[0]
+            // Adds the path to the array.
+            arrayOfFiles.push(componentPath)
+          }
         }
-      }
-    })
+      })
+    }
     
     // Returns the list of paths once there are no more directories to go through.
     return arrayOfFiles
   } catch (error) {
-  console.log(error)
+    console.log(error)
   }
 }
 
@@ -205,29 +207,32 @@ function updateComponentForwards(componentsPartialPath, directory , componentFol
     console.log('files found')
     console.log(filePaths)
 
-    // For each file found determine if the directory exists.
-    // Determine if a @forward statement should be added to or removed from _components.scss or targeted component list.
-    // Has the components directory as a source of truth.
-    filePaths.forEach(componentPath => {
-      console.log(componentPath)
-      // Path to the styles file of the component, used to check for its presence in the directory.
-      const stylesFile = `${componentsDir}/${componentPath}/style.scss`
+    if (filePaths.length) {
+      // For each file found determine if the directory exists.
+      // Determine if a @forward statement should be added to or removed from _components.scss or targeted component list.
+      // Has the components directory as a source of truth.
+      filePaths.forEach(componentPath => {
+        console.log(componentPath)
+        // Path to the styles file of the component, used to check for its presence in the directory.
+        const stylesFile = `${componentsDir}/${componentPath}/style.scss`
 
-      try {   
-        // Determine if the file exists or not.
-        if(fs.existsSync(stylesFile)) {
-          console.log("The file exists.", componentPath)
-          // Add a component `@forward` statement if style file is present.
-          addComponent(componentsPartialPath, componentPath, componentFolderName)
-        } else {
-          console.log('The file does not exist.', componentPath)
-          // Removes `@forward` statement if the directory is present but not style.scss is.
-          removeComponent(componentsPartialPath, componentPath)
+        try {   
+          // Determine if the file exists or not.
+          if(fs.existsSync(stylesFile)) {
+            console.log("The file exists.", componentPath)
+            // Add a component `@forward` statement if style file is present.
+            addComponent(componentsPartialPath, componentPath, componentFolderName)
+          } else {
+            console.log('The file does not exist.', componentPath)
+            // Removes `@forward` statement if the directory is present but not style.scss is.
+            removeComponent(componentsPartialPath, componentPath)
+          }
+        } catch (err) {
+          console.error(err)
         }
-      } catch (err) {
-        console.error(err)
-      }
-    })
+      })
+    }
+
 
   } catch (err) {
     console.error(err)
