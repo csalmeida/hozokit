@@ -166,6 +166,9 @@ function watcher(callback) {
     browserSync.init({
       proxy: browserSyncProxy,
       port: 2077,
+      notify: false,
+      // Do not open browser on start
+      open: false,
       ui: {
         port: 2020
       }
