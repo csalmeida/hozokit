@@ -13,6 +13,9 @@ wp-content/plugins/advanced-custom-fields-pro
 wp-content/ai1wm-backups/
 wp-content/plugins/all-in-one-wp-migration/storage/
 
+### Docker ###
+wp-content/themes/*/docker/volumes
+
 ### Linux ###
 *~
 

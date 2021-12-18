@@ -1,0 +1,54 @@
+services:
+  wordpress:
+    image: wordpress:latest
+    container_name: hozokit-wordpress
+    environment:
+      WORDPRESS_DB_HOST: hozokit-mysql
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_DB_PASSWORD: password
+      WORDPRESS_TABLE_PREFIX: "wp_"
+      WORDPRESS_DEBUG: 1
+    ports:
+      - "8080:80"
+    depends_on:
+      - "database"
+    volumes:
+      # Allows changes made to project directory to be accessed by the container via a bind mount.
+      - ${PWD}:/var/www/html/wp-content/themes/hozokit
+  database:
+    image: mysql:latest
+    container_name: hozokit-mysql
+    # PHP mysqli connector does not support caching_sha2_password plugin so using mysql_native_password instead.
+    command: "--default-authentication-plugin=mysql_native_password"
+    environment:
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: password
+    # This allows for the database to be consulted via a software such as SQL Workbench or TablePlus
+    ports:
+      - 3307:3306
+    volumes:
+      - ./docker/volumes/mysql:/var/lib/mysql
+    # Used to compile styles and scripts.
+  node:
+    # Building a custom image described in a docker file.
+    build:
+      # Setting a context and dockerfile paths allows for Dockerfiles to be stored away in a sub-directory.
+      context: . # Context of build, this is where the project files are stored.
+      dockerfile: ./docker/node.dockerfile # The path to Dockerfile and name of the dockerfile to be built
+    # Setting an image name avoids the same image being built multiple times.
+    image: csalmeida/hozokit-node-tooling:latest
+    # Specified the name of the container, commented out to avoid name conflicts when running multiple instances of the image.
+    # container_name: protonmail_themes
+    ports:
+      - 2077:2077
+    depends_on:
+      - "wordpress"
+    restart: always
+    volumes:
+      # Allows changes made to project directory to be accessed by the container via a bind mount.
+      - ${PWD}:/var/www/html/wp-content/themes/hozokit
+      # Adds a volume to store node dependencies.
+      - /var/www/html/wp-content/themes/hozokit/node_modules
