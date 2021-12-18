@@ -158,8 +158,8 @@ function readAllFiles(directory, componentFolderName, arrayOfFiles) {
     // Initially reads the directory.
     const files = fs.readdirSync(componentsDir)
 
-    // Updates array to provided values (from a previous iteration) or keeps it blank if it's the first one.
-    arrayOfFiles = arrayOfFiles || []
+    // Updates array to provided values (from a previous iteration) or makes use of straight up found files instead if it's a single interation run.
+    arrayOfFiles = arrayOfFiles || files
     
     if (arrayOfFiles.length) {
       // For every file found add it to the list.
