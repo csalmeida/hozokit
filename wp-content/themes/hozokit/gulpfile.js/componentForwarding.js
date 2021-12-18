@@ -185,7 +185,7 @@ function readAllFiles(directory, componentFolderName, arrayOfFiles) {
     // Returns the list of paths once there are no more directories to go through.
     return arrayOfFiles
   } catch (error) {
-    console.log(error)
+    console.error(error)
   }
 }
 
@@ -204,26 +204,21 @@ function updateComponentForwards(componentsPartialPath, directory , componentFol
   try {
     // Recursively retrieves all style file paths.
     const filePaths = readAllFiles(componentsDir, componentFolderName)
-    console.log('files found')
-    console.log(filePaths)
 
     if (filePaths.length) {
       // For each file found determine if the directory exists.
       // Determine if a @forward statement should be added to or removed from _components.scss or targeted component list.
       // Has the components directory as a source of truth.
       filePaths.forEach(componentPath => {
-        console.log(componentPath)
         // Path to the styles file of the component, used to check for its presence in the directory.
         const stylesFile = `${componentsDir}/${componentPath}/style.scss`
 
         try {   
           // Determine if the file exists or not.
           if(fs.existsSync(stylesFile)) {
-            console.log("The file exists.", componentPath)
             // Add a component `@forward` statement if style file is present.
             addComponent(componentsPartialPath, componentPath, componentFolderName)
           } else {
-            console.log('The file does not exist.', componentPath)
             // Removes `@forward` statement if the directory is present but not style.scss is.
             removeComponent(componentsPartialPath, componentPath)
           }
@@ -232,8 +227,6 @@ function updateComponentForwards(componentsPartialPath, directory , componentFol
         }
       })
     }
-
-
   } catch (err) {
     console.error(err)
   }
