@@ -144,6 +144,42 @@ Create an `.env` file in the [theme folder directory](wp-content/themes/hozokit)
 
 [Hot Reloading can be enabled](/docs/hot_reload.md) once the steps above have been followed.
 
+## Setup with Docker 🐋
+
+1. Make sure you have Docker installed and running on your machine.
+1. Using the terminal `cd` into the theme folder directory (e.g `wp-content/themes/hozokit`) where `docker-compose.yml` is located.
+1. Run `docker compose up --detach` in order to get the project running.
+1. Export the production database into an SQL dump with a method of your choice. (This requires access to the server and cPanel) (optional)
+1. Import database using a software of your choice (e.g MySQL Workbench or Table Plus), use the credentials below to connect to the database container. (optional)
+1. Once imported add any plugins to `docker/volumes/wordpress/plugins`. These can be downloaded from the cPanel file manager. (optional)
+1. Add the uploads folder to `docker/volumes/wordpress/uploads`. Can also be downloaded from the cPanel file manager. (optional)
+1. Access `localhost:8080` via the browser and sign in with one of the users available in the production version of the site.
+1. Make changes in the files and develop your theme.
+
+#### Database container credentials
+
+```
+IP: 127.0.0.1
+PORT: 3307
+
+DATABASE NAME: wordpress
+USER: wordpress
+PASSWORD: password
+ROOT PASSWORD: password
+```
+
+> ⚠️ These credentials are generated when the container is created and are meant to be used in development only.
+
+#### Using Docker day to day
+
+1. Run `docker compose up --detach`.
+1. Access the project in the browser via `localhost:8080`.
+1. Make any changes in the files.
+1. Run `docker compose down` to stop the containers.
+
+> **Why don't I have to run `npm run watch` or install Node dependencies?**
+> That's because one of the Docker containers has taken care of that for you. See `wp-content/themes/hozokit/docker/node.dockerfile` to learn more.
+
 # Customizing the theme
 
 A starting point is to [set the theme name and other information](https://codex.wordpress.org/File_Header) at `hozokit/styles/base.scss`. A custom `screenshot.png` can also be added later on to better identify the theme.
