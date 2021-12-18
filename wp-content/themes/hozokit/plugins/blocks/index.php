@@ -117,7 +117,7 @@ function hozokit_block_editor_style() {
 
 // Registers blocks and stylesheet.
 add_action( 'acf/init', 'hozokit_acf_init');
-add_action( 'enqueue_block_assets', 'hozokit_block_editor_style' );
+add_action( 'enqueue_block_editor_assets', 'hozokit_block_editor_style' );
 
 // Checks if plugin is activated, if not sends warning to admin.
 add_action('admin_notices', 'hozokit_block_admin_warning');

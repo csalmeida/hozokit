@@ -1,12 +1,132 @@
-@charset "UTF-8";/*!
+@charset "UTF-8";
+/*!
 Theme Name: hozokit
 Theme URI: https://github.com/csalmeida/hozokit
 Author: Cristiano Almeida
 Author URI: http://www.csalmeida.com
 Description: Component developmennt focused Wordpress theme template.
-Version: 1.2.0
+Version: 1.4.1
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Tags: custom, hozokit, csalmeida
 Text Domain: hozokit
-*/@font-face{font-family:Offside;src:url(assets/fonts/offside/Offside-Regular.ttf) format("truetype");font-style:normal;font-weight:400}@font-face{font-family:Karla;src:url(assets/fonts/karla/Karla-Regular.ttf) format("truetype");font-style:normal;font-weight:400}@font-face{font-family:Karla;src:url(assets/fonts/karla/Karla-Italic.ttf) format("truetype");font-style:italic;font-weight:400}@font-face{font-family:Karla;src:url(assets/fonts/karla/Karla-Bold.ttf) format("truetype");font-style:bold;font-weight:700}html{font-size:10px}body,html{width:100%;height:100%}h1,h2,h3,h4,h5,h6{text-transform:none;font-family:Offside,sans-serif;font-size:2.6rem;color:#0d0d0d;margin:3rem 0}h3{font-size:2.4rem}h3{font-size:2.2rem}h4{font-size:2rem}h5{font-size:1.8rem}h6{font-size:1.6rem}a,li,ol,p{font-family:Karla,sans-serif;font-size:1.6rem}.example h1{font-family:Karla,sans-serif}.example p{font-family:Offside,sans-serif}.footer{font-family:Karla,sans-serif}.header h2 a{font-family:Offside,sans-serif;font-size:2rem}
+*/
+/* Fonts 
+ * The font names being used in the theme.
+*/
+/* Include a font file into theme style. */
+/* Sets post text defaults to be used on admin and post stylesheets. */
+/* Makes component and block styles available
+ * to the Gutenberg Editor without leaking into the admin page.
+ * This second mixin is required in order for SASS to parse all styles correctly.
+*/
+/* 
+ * Define any fonts that are being used locally here.
+ * 1. Do not define variables that are used in style blocks, please use _variables.scss for that purpose.
+ * 2. The contents of this file can be removed if an alternative method of requiring fonts is being used, e.g Google Fonts, Adobe Fonts 
+*/
+@font-face {
+  font-family: "Offside";
+  src: url("assets/fonts/offside/Offside-Regular.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+}
+@font-face {
+  font-family: "Karla";
+  src: url("assets/fonts/karla/Karla-Regular.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+}
+@font-face {
+  font-family: "Karla";
+  src: url("assets/fonts/karla/Karla-Italic.ttf") format("truetype");
+  font-style: italic;
+  font-weight: 400;
+}
+@font-face {
+  font-family: "Karla";
+  src: url("assets/fonts/karla/Karla-Bold.ttf") format("truetype");
+  font-style: bold;
+  font-weight: 700;
+}
+/* Colors used in the theme. */
+/*
+A set of mixings to aid the use of media queries.
+Enmanuel Durán's approach as seen at:
+https://dev.to/duranenmanuel/another-approach-to-media-queries-with-the-power-of-sass-3ghf
+*/
+/* Apply to devices with a higher screen than a phone */
+/* Apply to devices with screen sizes smaller than a phone */
+/* Apply to only phone devices */
+/* Apply to devices in a range, in this case, between a phone and a tablet */
+/*
+ * Abstract partials are added here.
+ * Feel free to extend this is needed (e.g helpers, variables, functions)
+ */
+html {
+  font-size: 10px;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  text-transform: none;
+  font-family: "Offside", sans-serif;
+  font-size: 2.6rem;
+  color: "#c1c1c1";
+  margin: 3rem 0;
+}
+
+h3 {
+  font-size: 2.4rem;
+}
+
+h3 {
+  font-size: 2.2rem;
+}
+
+h4 {
+  font-size: 2rem;
+}
+
+h5 {
+  font-size: 1.8rem;
+}
+
+h6 {
+  font-size: 1.6rem;
+}
+
+p, a, ol, li {
+  font-family: "Karla", sans-serif;
+  font-size: 1.6rem;
+}
+
+p {
+  color: red;
+}
+
+.hozo-button {
+  color: pink;
+}
+
+.example h1 {
+  font-family: "Karla", sans-serif;
+  background: blueviolet;
+  color: white;
+}
+.example p {
+  font-family: "Offside", sans-serif;
+}
+
+.footer {
+  font-family: "Karla", sans-serif;
+}
+
+.header h2 a {
+  font-family: "Offside", sans-serif;
+  font-size: 2rem;
+}

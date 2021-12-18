@@ -1,0 +1,40 @@
+/* 
+ * Define any fonts that are being used locally here.
+ * 1. Do not define variables that are used in style blocks, please use _variables.scss for that purpose.
+ * 2. The contents of this file can be removed if an alternative method of requiring fonts is being used, e.g Google Fonts, Adobe Fonts 
+*/
+@use "mixins";
+
+// This path is defined to be able to use the same font declarations
+// on the theme side and the Gutenberg side.
+$font-path: "assets/fonts/" !default;
+
+// Define the paths for your fonts here, one per variable:
+$offside-path: $font-path + "offside/";
+$karla-path: $font-path + "karla/";
+
+// Add all the weights and styles used for the site.
+// This renders a respective @font-face for each one that is mentioned.
+@include mixins.font(
+  "Offside",
+  $offside-path+"Offside-Regular.ttf"
+);
+
+@include mixins.font(
+  "Karla",
+  $karla-path+"Karla-Regular.ttf"
+);
+
+@include mixins.font(
+  "Karla",
+  $karla-path+"Karla-Italic.ttf",
+  400,
+  italic
+);
+
+@include mixins.font(
+  "Karla",
+  $karla-path+"Karla-Bold.ttf",
+  700,
+  bold
+);

@@ -1,1 +1,3 @@
-"use strict";console.info("Hozokit");
+'use strict';
+
+console.info('Hozokit');
