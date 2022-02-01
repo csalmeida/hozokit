@@ -1,7 +1,9 @@
+@use "../../../styles/abstracts/variables" as v;
+
 //Outer margins for header.
 .header {
   h2 a {
-    font-family: $secondary-font;
+    font-family: v.$secondary-font;
     font-size: 2rem;
   }
 }

@@ -14,7 +14,7 @@ $devices: (
 
 
 /* Apply to devices with a higher screen than a phone */
-@mixin min-device($device: map-get($devices, 'phone')) {
+@mixin min-device($device: map-get($devices, "phone")) {
     @if map-has-key($devices, $device) {
         @media screen and (min-width: map-get($devices, $device)) {
             @content;
@@ -23,7 +23,7 @@ $devices: (
 }
 
 /* Apply to devices with screen sizes smaller than a phone */
-@mixin max-device($device: map-get($devices, 'phone')) {
+@mixin max-device($device: map-get($devices, "phone")) {
     @if map-has-key($devices, $device) {
         @media screen and (max-width: map-get($devices, $device) - 1) {
             @content;
@@ -32,7 +32,7 @@ $devices: (
 }
 
 /* Apply to only phone devices */
-@mixin only-device($device: map-get($devices, 'phone')) {
+@mixin only-device($device: map-get($devices, "phone")) {
     @if map-has-key($devices, $device) {
         $devices-length: length($devices);
         $map-list: map-keys($devices);
@@ -54,8 +54,8 @@ $devices: (
 
 /* Apply to devices in a range, in this case, between a phone and a tablet */
 @mixin between-devices(
-    $min-device: map-get($devices, 'phone'),
-    $max-device: map-get($devices, 'tablet')
+    $min-device: map-get($devices, "phone"),
+    $max-device: map-get($devices, "tablet")
 ) {
     @if map-has-key($devices, $min-device) and
         map-has-key($devices, $max-device)
