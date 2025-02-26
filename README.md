@@ -6,6 +6,9 @@
 By combining modern web technologies and a component based architecture, Hozokit is a theme building
 framework structured clearly for both, long-time [WordPress](https://wordpress.org/) developers and beginners.
 
+> [!IMPORTANT]
+> This repository has been archived and is no longer actively maintained.
+
 ### The benefit of Hozokit is in the setup.
 
 With [Gulp](https://gulpjs.com/) built-in, theme development is streamlined from the off, freeing you from arduous project setup by handling configuration and automation tasks for you. Meaning you can dive straight in to your next project. Hozokit automatically bundles styles, transpiles scripts, watches for changes and handles component files. Meaning you can get right to coding.
@@ -214,7 +217,7 @@ To define context for a specific view, we first get the current Timber context a
    $context['posts'] = Timber::get_posts();
 
    // Then the Twig template that should be rendered is specified
-   // and the $context with the new added values is passed to it. 
+   // and the $context with the new added values is passed to it.
    Timber::render( 'index.twig', $context);
 ?>
 ```
@@ -239,7 +242,7 @@ Now all values currently present in `$context` are available to `index.twig` alo
 
 Now the values can be accessed through a variable using dot notation, nice!
 
-However, `post` and `posts` won't be available outside `index.twig`. Sometimes it is useful to have values in `$context` that can be accessed in any template. 
+However, `post` and `posts` won't be available outside `index.twig`. Sometimes it is useful to have values in `$context` that can be accessed in any template.
 
 This is useful when, for example, it is needed to display dynamic information on a footer, or perhaps there's a menu that shows in all pages, or the user avatar.
 
@@ -255,7 +258,7 @@ To add data to `$context` that can be accessed in any template (globally) we nee
       'example' => 'add new entries to this array to make them available anywhere in any Twig template.',
       'user_is_admin' => current_user_can('administrator')
     );
-    
+
     # Merges your additions with the current context.
     $context = $context + $global_context;
     return $context;
@@ -291,7 +294,7 @@ Then there are more indivual files that define styling for a single component. E
 
 When styling components it is important that they have their own [`class`](https://developer.mozilla.org/en-US/docs/Web/CSS/Class_selectors) in order to avoid unexpected results in styling as all the rules will be merged into a single file.
 
-When styling components make sure to run `npm run watch` or `npm start` from the terminal in order to update styles. 
+When styling components make sure to run `npm run watch` or `npm start` from the terminal in order to update styles.
 
 > To enable Hot Reloading [follow this link](/docs/hot_reload.md) for more information.
 
@@ -304,6 +307,3 @@ Scripts can be split into multiple files and imported as needed.
 
 ### Supporting and maintaining the project
 Please feel free to ask any questions, add suggestions or point out bugs by creating an issue. Pull requests are welcome as well! Thank you 🙇🏻
-
-
-
